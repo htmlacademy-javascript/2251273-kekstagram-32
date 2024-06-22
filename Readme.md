@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Виталий Еченко](https://up.htmlacademy.ru/javascript/32/user/2251273).
-* Наставник: `Неизвестно`.
+* Наставник: [Евгений Лепёшкин](https://htmlacademy.ru/profile/spearance).
 
 ---
 
