@@ -45,20 +45,8 @@ function filterNumber2(string) {
 
 
 // test
-console.log(lengthString(testString, 27), testString.length);
-console.log(isPalindrome(testString));
-console.log(isPalindrome2(testString));
-console.log(filterNumber(testString), testString);
-console.log(filterNumber('год 2023'), '- год 2023');
-console.log(filterNumber('ECMAScriptghncv'), '- ECMAScriptghncv');
-console.log(filterNumber('1 кефир, 0.5 батона'), '- 1 кефир, 0.5 батона');
-console.log(filterNumber('агент 007'), '- агент 007');
-console.log(filterNumber('а я томат'), '- а я томат');
-console.log(filterNumber(2023));
-console.log(filterNumber(-1));
-console.log(filterNumber(1.5));
-console.log(filterNumber2('агент'), '- агент 007');
-console.log(filterNumber2(2023));
-console.log(filterNumber2(-1));
-console.log(filterNumber2(1.5));
-
+lengthString(testString, 27);
+isPalindrome(testString);
+isPalindrome2(testString);
+filterNumber(testString);
+filterNumber2('агент');
