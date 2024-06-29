@@ -1,6 +1,3 @@
-const testString = '  Лёша на полке клопа нашёл ';
-
-
 // функция проверки длины строки
 function lengthString(string, length) {
   return string.length <= length;
@@ -43,10 +40,7 @@ function filterNumber2(string) {
   return Number(String(string).replaceAll(' ', '').split('').filter((i) => !isNaN(i)).join('')) || NaN;
 }
 
+// функция генерации случайного числа
+const getRandomInt = (min = 0, max = 100) => Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1) + Math.ceil(min));
 
-// test
-lengthString(testString, 27);
-isPalindrome(testString);
-isPalindrome2(testString);
-filterNumber(testString);
-filterNumber2('агент');
+export { lengthString, isPalindrome, isPalindrome2, filterNumber, filterNumber2, getRandomInt };
