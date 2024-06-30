@@ -1,29 +1,75 @@
+// константы
+const MIN_NUM_LIKES = 15;
+const MAX_NUM_LIKES = 200;
+
+const MIN_NUM_COMMENTS = 0;
+const MAX_NUM_COMMENTS = 30;
+
+const MIN_NUM_AVATARS = 1;
+const MAX_NUM_AVATARS = 6;
+
+const MAX_NUM_PHOTO = 25;
+
+
 // функция генерации случайного числа
 const getRandomInt = (min = 0, max = 100) => Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1) + Math.ceil(min));
 
-// likes
-const likes = new function () {
-  this.MIN = 15;
-  this.MAX = 200;
-  this.set = new Set();
-  this.random = getRandomInt(this.MIN, this.MAX);
+// функция генерации случайного описания
+const getRandomDescription = () => {
+  this.listDescription = [
+    'Эта фотография сделана',
+    'Это фото сделано',
+    'Снимок сделан',
+    'Момент запечатлен'
+  ];
+  this.listCity = [
+    'Москве',
+    'Санкт-Петербурге',
+    'Новосибирске',
+    'Красноярске',
+    'Екатеринбурге',
+    'Минске',
+    'Витебске',
+    'Севастополе',
+    'Брянске',
+    'Владивостоке',
+    'Бресте'
+  ];
+  this.listPeople = [
+    'c подругой',
+    'c другом',
+    'c друзьями',
+    'c подругами',
+  ];
+  this.listEvents = [
+    'путешествия',
+    'прогулки',
+    'фотосессии',
+    'отдыха'
+  ];
+
+  return `${this.listDescription[getRandomInt(0, this.listDescription.length - 1)]} в ${this.listCity[getRandomInt(0, this.listCity.length - 1)]} ${getRandomInt(1, 29)}/${getRandomInt(1, 12)}/${getRandomInt(1991, 2023)}. Во время ${this.listEvents[getRandomInt(0, this.listEvents.length - 1)]} ${this.listPeople[getRandomInt(0, this.listPeople.length - 1)]}.`;
 };
 
-// comments
+// функция генерации случайного количество лайков
+const likes = new function () {
+  this.random = () => getRandomInt(MIN_NUM_LIKES, MAX_NUM_LIKES);
+};
+
+// функция генерации случайного комментария
 const comments = new function () {
-  this.MIN = 0;
-  this.MAX = 30;
   this.listComents = {
     'best': [
-      'Великолепно!',
-      'Восхитительно!!!',
-      'Супер!!!',
-      'Всё отлично!!!'
+      'Великолепно! Приятно удивили!',
+      'Восхитительно!',
+      'Супер!',
+      'Всё отлично! Круто!',
+      'Прекрасно!',
     ],
     'good': [
       'Отлично.',
       'Хорошо.',
-      'В целом всё неплохо. Но не всё.'
+      'В целом всё неплохо. Но не всё.',
     ],
     'normal': [
       'Норм',
@@ -39,7 +85,7 @@ const comments = new function () {
       'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
     ]
   };
-  this.random = getRandomInt(this.MIN, this.MAX);
+  this.random = () => getRandomInt(MIN_NUM_COMMENTS, MAX_NUM_COMMENTS);
   this.indexComent = 1;
   this.getIndex = () => this.indexComent++;
   this.getRandomComent = () => {
@@ -49,10 +95,8 @@ const comments = new function () {
   };
 };
 
-// users
+// функция генерации случайного пользователя
 const users = new function () {
-  this.AVATAR_MIN = 1;
-  this.AVATAR_MAX = 6;
   this.firstNameFemale = [
     'Ксения',
     'Виктория',
@@ -102,7 +146,6 @@ const users = new function () {
     'Гаврилов',
   ];
   this.listUsers = new Array();
-  this.random = getRandomInt(this.MIN, this.MAX);
   this.randomUser = null;
   this.createRandomUser = () => {
     let userName;
@@ -119,7 +162,7 @@ const users = new function () {
       }
     }
     // добавление пользователя
-    this.listUsers.push(new Object({ name: userName, avatar: `img/avatar-${getRandomInt(this.AVATAR_MIN, this.AVATAR_MAX)}.svg` }));
+    this.listUsers.push(new Object({ name: userName, avatar: `img/avatar-${getRandomInt(MIN_NUM_AVATARS, MAX_NUM_AVATARS)}.svg` }));
   };
   this.getRandomUser = () => {
     this.createRandomUser();
@@ -129,38 +172,22 @@ const users = new function () {
 };
 
 
-// console.time('time');
-
-const photos = new Array(25)
+const photos = new Array(MAX_NUM_PHOTO)
   .fill()
   .map((elementPhoto, indexPhoto) => new Object({
     id: ++indexPhoto,
     url: `photos/${indexPhoto}.jpg`,
-    description: `photo ${indexPhoto}`,
-    likes: likes.random,
-    comments: new Array(comments.random)
+    description: getRandomDescription(),
+    likes: likes.random(),
+    comments: new Array(comments.random())
       .fill()
-      .map((elementComents, indexComments) => new Object({
+      .map(() => new Object({
         id: comments.getIndex(),
         avatar: users.getRandomUser()?.avatar,
-        message: `${comments.getRandomComent()} ${indexComments}`,
+        message: `${comments.getRandomComent()}`,
         name: users.randomUser?.name
       }))
   }));
 
 
-export { getRandomInt, photos};
-// console.timeEnd('time');
-
-// console.log(getRandomInt(0.9, 100));
-// console.log(photos[24]);
-
-// console.log(photos.at(-1));
-// console.log(photos[0]);
-// avatars.set.add(getRandomInt(avatars.MIN, avatars.MAX));
-// avatars.set.add(getRandomInt(avatars.MIN, avatars.MAX));
-// avatars.set.add(getRandomInt(avatars.MIN, avatars.MAX));
-// console.log(Object.keys(comments.listComents)[getRandomInt(0, Object.keys(comments.listComents).length - 1)]);
-// console.log(comments.listComents[Object.keys(comments.listComents)[getRandomInt(0, Object.keys(comments.listComents).length - 1)]][0]);
-// console.log(users.listUsers.length);
-
+export { photos };
