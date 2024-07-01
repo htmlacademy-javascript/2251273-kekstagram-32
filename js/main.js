@@ -15,7 +15,7 @@ const MAX_NUM_PHOTO = 25;
 const getRandomInt = (min = 0, max = 100) => Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1) + Math.ceil(min));
 
 // функция генерации случайного описания
-const getRandomDescription = () => {
+const description = new function () {
   this.listDescription = [
     'Эта фотография сделана',
     'Это фото сделано',
@@ -48,7 +48,8 @@ const getRandomDescription = () => {
     'отдыха'
   ];
 
-  return `${this.listDescription[getRandomInt(0, this.listDescription.length - 1)]} в ${this.listCity[getRandomInt(0, this.listCity.length - 1)]} ${getRandomInt(1, 29)}/${getRandomInt(1, 12)}/${getRandomInt(1991, 2023)}. Во время ${this.listEvents[getRandomInt(0, this.listEvents.length - 1)]} ${this.listPeople[getRandomInt(0, this.listPeople.length - 1)]}.`;
+
+  this.getRandomDescription = `${this.listDescription[getRandomInt(0, this.listDescription.length - 1)]} в ${this.listCity[getRandomInt(0, this.listCity.length - 1)]} ${getRandomInt(1, 29)}/${getRandomInt(1, 12)}/${getRandomInt(1991, 2023)}. Во время ${this.listEvents[getRandomInt(0, this.listEvents.length - 1)]} ${this.listPeople[getRandomInt(0, this.listPeople.length - 1)]}.`;
 };
 
 // функция генерации случайного количество лайков
@@ -177,17 +178,16 @@ const photos = new Array(MAX_NUM_PHOTO)
   .map((elementPhoto, indexPhoto) => new Object({
     id: ++indexPhoto,
     url: `photos/${indexPhoto}.jpg`,
-    description: getRandomDescription(),
+    description: description.getRandomDescription,
     likes: likes.random(),
     comments: new Array(comments.random())
       .fill()
       .map(() => new Object({
         id: comments.getIndex(),
         avatar: users.getRandomUser()?.avatar,
-        message: `${comments.getRandomComent()}`,
+        message: comments.getRandomComent(),
         name: users.randomUser?.name
       }))
   }));
-
 
 export { photos };
