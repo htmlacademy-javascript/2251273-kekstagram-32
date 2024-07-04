@@ -187,7 +187,7 @@ const USERS = new function () {
 
 
 // функция генерации случайного фото
-const photos = new function () {
+const PHOTOS = new function () {
   this.listPhotos = new Array(MAX_NUM_PHOTO)
     .fill()
     .map((elementPhoto, indexPhoto) => new Object({
@@ -207,4 +207,4 @@ const photos = new function () {
 };
 
 
-export { photos };
+export { PHOTOS };

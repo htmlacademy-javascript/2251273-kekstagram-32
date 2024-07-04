@@ -43,4 +43,14 @@ function filterNumber2(string) {
 // функция генерации случайного числа
 const getRandomInt = (min = 0, max = 100) => Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1) + Math.ceil(min));
 
-export { lengthString, isPalindrome, isPalindrome2, filterNumber, filterNumber2, getRandomInt };
+// Функция перевода времени в минуты
+const getMinutes = function (timeDay) {
+  const [hours, minutes] = timeDay.split(':').map((item) => Number(item));
+  return hours * 60 + minutes;
+};
+
+// Функция проверки рабочих часов
+const isWorkingHours = (beginningWork, endWork, beginningMeeting, durationMeeting) => getMinutes(beginningWork) <= getMinutes(beginningMeeting) && getMinutes(beginningMeeting) + durationMeeting <= getMinutes(endWork);
+
+
+export { lengthString, isPalindrome, isPalindrome2, filterNumber, filterNumber2, getRandomInt, isWorkingHours };

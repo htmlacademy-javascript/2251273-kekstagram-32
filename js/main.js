@@ -1,7 +1,7 @@
-import { photos } from './data.js';
+import { PHOTOS } from './data.js';
 
-const result = photos.listPhotos;
-result.sort((a, b) => a.likes - b.likes);
+const RESULT = PHOTOS.listPhotos;
+RESULT.sort((a, b) => a.likes - b.likes);
 
-export { result };
+export { RESULT };
 
