@@ -62,7 +62,7 @@ const DESCRIPTION = new function () {
   ];
 
 
-  this.getRandomDescription = `${this.listDescription[getRandomInt(0, this.listDescription.length - 1)]} в ${this.listCity[getRandomInt(0, this.listCity.length - 1)]} ${getRandomInt(DATE_DESCRIPTION.MIN_DAY, DATE_DESCRIPTION.MAX_DAY)}/${getRandomInt(DATE_DESCRIPTION.MIN_MONTH, DATE_DESCRIPTION.MAX_MONTH)}/${getRandomInt(DATE_DESCRIPTION.MIN_YEAR, DATE_DESCRIPTION.MAX_YEAR, DATE_DESCRIPTION.MAX_YEAR)}. Во время ${this.listEvents[getRandomInt(0, this.listEvents.length - 1)]} ${this.listPeople[getRandomInt(0, this.listPeople.length - 1)]}.`;
+  this.getRandomDescription = () => `${this.listDescription[getRandomInt(0, this.listDescription.length - 1)]} в ${this.listCity[getRandomInt(0, this.listCity.length - 1)]} ${getRandomInt(DATE_DESCRIPTION.MIN_DAY, DATE_DESCRIPTION.MAX_DAY)}/${getRandomInt(DATE_DESCRIPTION.MIN_MONTH, DATE_DESCRIPTION.MAX_MONTH)}/${getRandomInt(DATE_DESCRIPTION.MIN_YEAR, DATE_DESCRIPTION.MAX_YEAR, DATE_DESCRIPTION.MAX_YEAR)}. Во время ${this.listEvents[getRandomInt(0, this.listEvents.length - 1)]} ${this.listPeople[getRandomInt(0, this.listPeople.length - 1)]}.`;
 };
 
 // функция генерации случайного количество лайков LIKES
@@ -187,24 +187,22 @@ const USERS = new function () {
 
 
 // функция генерации случайного фото
-const PHOTOS = new function () {
-  this.listPhotos = new Array(MAX_NUM_PHOTO)
-    .fill()
-    .map((elementPhoto, indexPhoto) => new Object({
-      id: ++indexPhoto,
-      url: `photos/${indexPhoto}.jpg`,
-      description: DESCRIPTION.getRandomDescription,
-      likes: LIKES.random(),
-      comments: new Array(COMMENTS.random())
-        .fill()
-        .map(() => new Object({
-          id: COMMENTS.getIndex(),
-          avatar: USERS.getRandomUser()?.avatar,
-          message: COMMENTS.getRandomComent(),
-          name: USERS.randomUser?.name
-        }))
-    }));
-};
+const PHOTOS = new Array(MAX_NUM_PHOTO)
+  .fill()
+  .map((elementPhoto, indexPhoto) => new Object({
+    id: indexPhoto + 1,
+    url: `photos/${(indexPhoto % 25) + 1}.jpg`,
+    description: DESCRIPTION.getRandomDescription(),
+    likes: LIKES.random(),
+    comments: new Array(COMMENTS.random())
+      .fill()
+      .map(() => new Object({
+        id: COMMENTS.getIndex(),
+        avatar: USERS.getRandomUser()?.avatar,
+        message: COMMENTS.getRandomComent(),
+        name: USERS.randomUser?.name
+      }))
+  }));
 
 
 export { PHOTOS };

@@ -1,6 +1,10 @@
 import { PHOTOS } from './data.js';
+import { drawsThumbnails, drawsThumbnails2 } from './thumbnails.js';
 
-const RESULT = PHOTOS.listPhotos;
-RESULT.sort((a, b) => a.likes - b.likes);
 
-export { RESULT };
+// drawsThumbnails(PHOTOS);
+drawsThumbnails2(PHOTOS);
+
+
+export { drawsThumbnails, drawsThumbnails2 };
+
