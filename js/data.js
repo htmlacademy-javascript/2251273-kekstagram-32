@@ -9,7 +9,7 @@ const NUM_LIKES = {
 };
 
 const NUM_COMMENTS = {
-  MIN: 0,
+  MIN: 10,
   MAX: 30
 };
 
@@ -191,7 +191,7 @@ const PHOTOS = new Array(MAX_NUM_PHOTO)
   .fill()
   .map((elementPhoto, indexPhoto) => new Object({
     id: indexPhoto + 1,
-    url: `photos/${(indexPhoto % 25) + 1}.jpg`,
+    url: `./photos/${(indexPhoto % 25) + 1}.jpg`,
     description: DESCRIPTION.getRandomDescription(),
     likes: LIKES.random(),
     comments: new Array(COMMENTS.random())

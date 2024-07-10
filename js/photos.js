@@ -1,3 +1,5 @@
+import { bigPictureOpen } from './picture.js';
+
 const templatePicture = document.querySelector('#picture').content.querySelector('.picture');
 const picturesContrainer = document.querySelector('.pictures');
 const fragment = document.createDocumentFragment();
@@ -10,8 +12,9 @@ const drawsPhoto = (photo) => {
   elementImage.alt = photo.description;
   element.querySelector('.picture__likes').textContent = photo.likes;
   element.querySelector('.picture__comments').textContent = photo.comments.length;
-  elementImage.addEventListener('click', (evt) => {
-    evt.preventDefault();
+  elementImage.addEventListener('click', () => {
+    // evt.preventDefault();
+    bigPictureOpen(photo);
   });
   return element;
 };
