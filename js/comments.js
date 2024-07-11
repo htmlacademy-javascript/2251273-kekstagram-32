@@ -1,15 +1,15 @@
 const picture = document.querySelector('.big-picture');
 const socialComments = picture.querySelector('.social__comments');
-const socialCommentShownCount = picture.querySelector('.social__comment-shown-count');
-const commentShownCount = socialCommentShownCount.textContent;
-const socialCommentTotalCount = picture.querySelector('.social__comment-total-count');
-const socialCommentsLoader = picture.querySelector('.social__comments-loader');
+// const socialCommentShownCount = picture.querySelector('.social__comment-shown-count');
+// const commentShownCount = socialCommentShownCount.textContent;
+// const socialCommentTotalCount = picture.querySelector('.social__comment-total-count');
+// const socialCommentsLoader = picture.querySelector('.social__comments-loader');
 
 
-const commentsLoader = (comments) => {
-  socialCommentsLoader.addEventListener('click', () => {
-  });
-};
+// const commentsLoader = (comments) => {
+//   socialCommentsLoader.addEventListener('click', () => {
+//   });
+// };
 
 
 // функция отрисовки коментария
@@ -33,19 +33,14 @@ const createComment = (comment) => {
 // функция отрисовки коментариев
 const drawComments = (comments) => {
   const counter = 5;
+  socialComments.innerHTML = '';
+  comments.slice(0, counter).forEach((element) => {
+    socialComments.append(createComment(element));
+  });
 
-  let inner = () => {
-    socialComments.innerHTML = '';
-    comments.slice(0, counter).forEach((element) => {
-      socialComments.append(createComment(element));
-    });
-  };
-
-  inner();
   // socialCommentShownCount.textContent = comments.length > counter ? counter : comments.length;
   // socialCommentTotalCount.textContent = comments.length;
-
-  commentsLoader(comments);
+  // commentsLoader(comments);
 };
 
 export { drawComments };
