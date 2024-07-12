@@ -1,4 +1,4 @@
-import { drawComments } from './comments.js';
+import { drawsComments } from './comments.js';
 
 const picture = document.querySelector('.big-picture');
 const pictureImg = picture.querySelector('.big-picture__img').querySelector('img');
@@ -28,7 +28,7 @@ const bigPictureOpen = (photo) => {
   socialCaption.textContent = photo.description;
   picture.classList.remove('hidden');
   bigPictureClose();
-  drawComments(photo.comments);
+  drawsComments(photo.comments);
   document.body.classList.add('modal-open');
 };
 

@@ -1,16 +1,21 @@
 const picture = document.querySelector('.big-picture');
 const socialComments = picture.querySelector('.social__comments');
 const socialCommentShownCount = picture.querySelector('.social__comment-shown-count');
-const commentShownCount = socialCommentShownCount.textContent;
 const socialCommentTotalCount = picture.querySelector('.social__comment-total-count');
 const socialCommentsLoader = picture.querySelector('.social__comments-loader');
 
+const commentShownCount = 5;
 
-const commentsLoader = (comments) => {
-  socialCommentsLoader.addEventListener('click', () => {
-  });
+
+// функция проверки вывода всех коментариев
+
+const isAllComments = (comments, displayedComments) => {
+  if (comments.length <= displayedComments) {
+    socialCommentsLoader.classList.add('hidden');
+  } else {
+    socialCommentsLoader.classList.remove('hidden');
+  }
 };
-
 
 // функция отрисовки коментария
 const createComment = (comment) => {
@@ -31,21 +36,18 @@ const createComment = (comment) => {
 };
 
 // функция отрисовки коментариев
-const drawComments = (comments) => {
-  const counter = 5;
-
-  let inner = () => {
-    socialComments.innerHTML = '';
-    comments.slice(0, counter).forEach((element) => {
-      socialComments.append(createComment(element));
-    });
-  };
-
-  inner();
-  // socialCommentShownCount.textContent = comments.length > counter ? counter : comments.length;
-  // socialCommentTotalCount.textContent = comments.length;
-
-  commentsLoader(comments);
+const drawsComments = (comments, displayedComments = commentShownCount) => {
+  socialComments.innerHTML = '';
+  comments.slice(0, displayedComments).forEach((element) => {
+    socialComments.append(createComment(element));
+  });
+  socialCommentShownCount.textContent = comments.length > displayedComments ? displayedComments : comments.length;
+  socialCommentTotalCount.textContent = comments.length;
+  isAllComments(comments, displayedComments);
+  socialCommentsLoader.addEventListener('click', () => {
+    drawsComments(comments, displayedComments + commentShownCount);
+  });
 };
 
-export { drawComments };
+
+export { drawsComments };

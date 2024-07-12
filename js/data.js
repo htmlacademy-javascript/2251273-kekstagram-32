@@ -9,7 +9,7 @@ const NUM_LIKES = {
 };
 
 const NUM_COMMENTS = {
-  MIN: 10,
+  MIN: 0,
   MAX: 30
 };
 
