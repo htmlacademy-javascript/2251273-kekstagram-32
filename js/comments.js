@@ -38,11 +38,14 @@ const createComment = (comment) => {
 // функция отрисовки коментариев
 const drawsComments = (comments, displayedComments = commentShownCount) => {
   socialComments.innerHTML = '';
+
   comments.slice(0, displayedComments).forEach((element) => {
     socialComments.append(createComment(element));
   });
+
   socialCommentShownCount.textContent = comments.length > displayedComments ? displayedComments : comments.length;
   socialCommentTotalCount.textContent = comments.length;
+
   isAllComments(comments, displayedComments);
   socialCommentsLoader.addEventListener('click', () => {
     drawsComments(comments, displayedComments + commentShownCount);
