@@ -37,23 +37,50 @@ const createComment = (comment) => {
   return element;
 };
 
-function click (comments) {
-  console.log('click');
-}
 
 // функция отрисовки коментариев
-const drawsComments = (comments, displayedComments = commentShownCount) => {
+const drawsComments = (comments) => {
   console.log('drawsComments');
-  socialComments.innerHTML = '';
+  let displayedComments = 0;
 
-  comments.slice(0, displayedComments).forEach((element) => {
-    socialComments.append(createComment(element));
-  });
+  const showComments = () => {
+    console.log('showComments');
+    displayedComments += commentShownCount;
 
-  isAllComments(comments, displayedComments);
+    socialComments.innerHTML = '';
+    comments.slice(0, displayedComments).forEach((element) => {
+      socialComments.append(createComment(element));
+    });
+    isAllComments(comments, displayedComments);
+  };
 
-  socialCommentsLoader.addEventListener('click', click);
+  showComments();
+
+  socialCommentsLoader.addEventListener('click', showComments, { once: true });
 };
+
+
+// const drawsComments = (comments) => {
+//   console.log('drawsComments');
+//   let displayedComments = commentShownCount;
+
+//   socialComments.innerHTML = '';
+//   comments.slice(0, displayedComments).forEach((element) => {
+//     socialComments.append(createComment(element));
+//   });
+
+//   isAllComments(comments, displayedComments);
+
+//   socialCommentsLoader.addEventListener('click', () => {
+//     console.log('showComments');
+//     displayedComments += commentShownCount;
+//     socialComments.innerHTML = '';
+//     comments.slice(0, displayedComments).forEach((element) => {
+//       socialComments.append(createComment(element));
+//     });
+//     isAllComments(comments, displayedComments);
+//   });
+// };
 
 
 export { drawsComments };
