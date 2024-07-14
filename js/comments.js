@@ -15,6 +15,8 @@ const isAllComments = (comments, displayedComments) => {
   } else {
     socialCommentsLoader.classList.remove('hidden');
   }
+  socialCommentShownCount.textContent = comments.length > displayedComments ? displayedComments : comments.length;
+  socialCommentTotalCount.textContent = comments.length;
 };
 
 // функция отрисовки коментария
@@ -35,21 +37,22 @@ const createComment = (comment) => {
   return element;
 };
 
+function click (comments) {
+  console.log('click');
+}
+
 // функция отрисовки коментариев
 const drawsComments = (comments, displayedComments = commentShownCount) => {
+  console.log('drawsComments');
   socialComments.innerHTML = '';
 
   comments.slice(0, displayedComments).forEach((element) => {
     socialComments.append(createComment(element));
   });
 
-  socialCommentShownCount.textContent = comments.length > displayedComments ? displayedComments : comments.length;
-  socialCommentTotalCount.textContent = comments.length;
-
   isAllComments(comments, displayedComments);
-  socialCommentsLoader.addEventListener('click', () => {
-    drawsComments(comments, displayedComments + commentShownCount);
-  });
+
+  socialCommentsLoader.addEventListener('click', click);
 };
 
 

@@ -205,4 +205,4 @@ const PHOTOS = new Array(MAX_NUM_PHOTO)
   }));
 
 
-export { PHOTOS };
+export { PHOTOS, NUM_AVATARS };
