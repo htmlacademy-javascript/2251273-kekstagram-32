@@ -38,49 +38,28 @@ const createComment = (comment) => {
 };
 
 
-// функция отрисовки коментариев
 const drawsComments = (comments) => {
-  console.log('drawsComments');
-  let displayedComments = 0;
+  let displayedComments = commentShownCount;
+  const fragment = document.createDocumentFragment();
 
-  const showComments = () => {
-    console.log('showComments');
+  socialComments.innerHTML = '';
+  comments.slice(0, displayedComments).forEach((element) => {
+    fragment.append(createComment(element));
+  });
+  socialComments.append(fragment);
+
+  isAllComments(comments, displayedComments);
+
+  socialCommentsLoader.addEventListener('click', () => {
     displayedComments += commentShownCount;
-
     socialComments.innerHTML = '';
     comments.slice(0, displayedComments).forEach((element) => {
-      socialComments.append(createComment(element));
+      fragment.append(createComment(element));
     });
+    socialComments.append(fragment);
     isAllComments(comments, displayedComments);
-  };
-
-  showComments();
-
-  socialCommentsLoader.addEventListener('click', showComments, { once: true });
+  });
 };
-
-
-// const drawsComments = (comments) => {
-//   console.log('drawsComments');
-//   let displayedComments = commentShownCount;
-
-//   socialComments.innerHTML = '';
-//   comments.slice(0, displayedComments).forEach((element) => {
-//     socialComments.append(createComment(element));
-//   });
-
-//   isAllComments(comments, displayedComments);
-
-//   socialCommentsLoader.addEventListener('click', () => {
-//     console.log('showComments');
-//     displayedComments += commentShownCount;
-//     socialComments.innerHTML = '';
-//     comments.slice(0, displayedComments).forEach((element) => {
-//       socialComments.append(createComment(element));
-//     });
-//     isAllComments(comments, displayedComments);
-//   });
-// };
 
 
 export { drawsComments };
