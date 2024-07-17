@@ -3,11 +3,6 @@ import { getRandomInt } from './functions.js';
 import { NUM_AVATARS } from './data.js';
 
 const picture = document.querySelector('.big-picture');
-const pictureImg = picture.querySelector('.big-picture__img').querySelector('img');
-const pictureCancel = picture.querySelector('.big-picture__cancel');
-const likesCount = picture.querySelector('.likes-count');
-const socialCaption = picture.querySelector('.social__caption');
-const socialPicture = picture.querySelector('.social__picture');
 
 
 // функция закрытия большой картинки
@@ -28,21 +23,33 @@ const tracksEscKeystrokes = (evt) => {
 
 // функция открытия большой картинки
 const bigPictureOpen = (photo) => {
+  const bigPicturePreview = picture.querySelector('.big-picture__preview');
+  const pictureCloned = bigPicturePreview.cloneNode(true);
+  const pictureClonedImg = pictureCloned.querySelector('.big-picture__img').querySelector('img');
+  const socialPicture = pictureCloned.querySelector('.social__picture');
+  const likesCount = pictureCloned.querySelector('.likes-count');
+  const socialCaption = pictureCloned.querySelector('.social__caption');
+  const pictureCancel = pictureCloned.querySelector('.big-picture__cancel');
+
+  bigPicturePreview.remove();
+
+  pictureClonedImg.src = photo.url;
   socialPicture.src = `img/avatar-${getRandomInt(NUM_AVATARS.MIN, NUM_AVATARS.MAX)}.svg`;
-  pictureImg.src = photo.url;
   likesCount.textContent = photo.likes;
   socialCaption.textContent = photo.description;
 
-  picture.classList.remove('hidden');
-  document.body.classList.add('modal-open');
-  document.addEventListener('keydown', tracksEscKeystrokes);
-
-  drawsComments(photo.comments);
+  drawsComments(pictureCloned, photo.comments);
 
   pictureCancel.addEventListener('click', () => {
     bigPictureClose();
     document.removeEventListener('keydown', tracksEscKeystrokes);
   });
+
+  picture.append(pictureCloned);
+
+  picture.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  document.addEventListener('keydown', tracksEscKeystrokes);
 };
 
 export { bigPictureOpen };
