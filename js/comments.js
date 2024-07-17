@@ -15,7 +15,7 @@ const isAllComments = (comments, displayedComments) => {
   } else {
     socialCommentsLoader.classList.remove('hidden');
   }
-  socialCommentShownCount.textContent = comments.length > displayedComments ? displayedComments : comments.length;
+  socialCommentShownCount.textContent = socialComments.childElementCount;
   socialCommentTotalCount.textContent = comments.length;
 };
 

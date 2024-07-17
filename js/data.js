@@ -196,10 +196,10 @@ const PHOTOS = new Array(MAX_NUM_PHOTO)
     likes: LIKES.random(),
     comments: new Array(COMMENTS.random())
       .fill()
-      .map(() => new Object({
+      .map((elementComment, indexComment) => new Object({
         id: COMMENTS.getIndex(),
         avatar: USERS.getRandomUser()?.avatar,
-        message: COMMENTS.getRandomComent(),
+        message: `index:${++indexComment} / photo:${(indexPhoto % 25) + 1} : ${COMMENTS.getRandomComent()}`,
         name: USERS.randomUser?.name
       }))
   }));

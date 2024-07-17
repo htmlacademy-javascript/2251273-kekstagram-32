@@ -12,17 +12,19 @@ const socialPicture = picture.querySelector('.social__picture');
 
 // функция закрытия большой картинки
 const bigPictureClose = () => {
-  pictureCancel.addEventListener('click', () => {
-    picture.classList.add('hidden');
-    document.body.classList.remove('modal-open');
-  }, { once: true });
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      picture.classList.add('hidden');
-      document.body.classList.remove('modal-open');
-    }
-  });
+  picture.classList.add('hidden');
+  document.body.classList.remove('modal-open');
 };
+
+
+// функция отслеживания нажатия Esc
+const tracksEscKeystrokes = (evt) => {
+  if (evt.key === 'Escape') {
+    bigPictureClose();
+    document.removeEventListener('keydown', tracksEscKeystrokes);
+  }
+};
+
 
 // функция открытия большой картинки
 const bigPictureOpen = (photo) => {
@@ -30,10 +32,17 @@ const bigPictureOpen = (photo) => {
   pictureImg.src = photo.url;
   likesCount.textContent = photo.likes;
   socialCaption.textContent = photo.description;
+
   picture.classList.remove('hidden');
-  bigPictureClose();
-  drawsComments(photo.comments);
   document.body.classList.add('modal-open');
+  document.addEventListener('keydown', tracksEscKeystrokes);
+
+  drawsComments(photo.comments);
+
+  pictureCancel.addEventListener('click', () => {
+    bigPictureClose();
+    document.removeEventListener('keydown', tracksEscKeystrokes);
+  });
 };
 
 export { bigPictureOpen };
