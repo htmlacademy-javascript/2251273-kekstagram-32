@@ -191,18 +191,18 @@ const PHOTOS = new Array(MAX_NUM_PHOTO)
   .fill()
   .map((elementPhoto, indexPhoto) => new Object({
     id: indexPhoto + 1,
-    url: `photos/${(indexPhoto % 25) + 1}.jpg`,
+    url: `./photos/${(indexPhoto % 25) + 1}.jpg`,
     description: DESCRIPTION.getRandomDescription(),
     likes: LIKES.random(),
     comments: new Array(COMMENTS.random())
       .fill()
-      .map(() => new Object({
+      .map((elementComment, indexComment) => new Object({
         id: COMMENTS.getIndex(),
         avatar: USERS.getRandomUser()?.avatar,
-        message: COMMENTS.getRandomComent(),
+        message: `index:${++indexComment} / photo:${(indexPhoto % 25) + 1} : ${COMMENTS.getRandomComent()}`,
         name: USERS.randomUser?.name
       }))
   }));
 
 
-export { PHOTOS };
+export { PHOTOS, NUM_AVATARS };

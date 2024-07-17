@@ -1,10 +1,10 @@
 import { PHOTOS } from './data.js';
-import { drawsThumbnails, drawsThumbnails2 } from './thumbnails.js';
+import { drawsPhotos } from './photos.js';
+// import { picture } from './picture.js';
 
 
-// drawsThumbnails(PHOTOS);
-drawsThumbnails2(PHOTOS);
+drawsPhotos(PHOTOS);
 
 
-export { drawsThumbnails, drawsThumbnails2 };
+export { PHOTOS };
 
