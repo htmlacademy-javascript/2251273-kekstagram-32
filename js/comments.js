@@ -9,8 +9,8 @@ const commentShownCount = 5;
 
 // функция проверки вывода всех коментариев
 
-const isAllComments = (comments, displayedComments) => {
-  if (comments.length <= displayedComments) {
+const isAllComments = (comments) => {
+  if (comments.length <= socialComments.childElementCount) {
     socialCommentsLoader.classList.add('hidden');
   } else {
     socialCommentsLoader.classList.remove('hidden');
@@ -38,26 +38,29 @@ const createComment = (comment) => {
 };
 
 
-const drawsComments = (comments) => {
-  let displayedComments = commentShownCount;
-  const fragment = document.createDocumentFragment();
+// функция отрисовки следующих коментариев
+const showNextComents = (comments, displayedComments) => {
+  // console.log('click');
 
   socialComments.innerHTML = '';
+  const fragment = document.createDocumentFragment();
   comments.slice(0, displayedComments).forEach((element) => {
     fragment.append(createComment(element));
   });
-  socialComments.append(fragment);
 
+  socialComments.append(fragment);
   isAllComments(comments, displayedComments);
+};
+
+// функция отрисовки коментариев
+const drawsComments = (comments) => {
+
+  let displayedComments = commentShownCount;
+  showNextComents(comments, displayedComments);
 
   socialCommentsLoader.addEventListener('click', () => {
     displayedComments += commentShownCount;
-    socialComments.innerHTML = '';
-    comments.slice(0, displayedComments).forEach((element) => {
-      fragment.append(createComment(element));
-    });
-    socialComments.append(fragment);
-    isAllComments(comments, displayedComments);
+    showNextComents(comments, displayedComments);
   });
 };
 
