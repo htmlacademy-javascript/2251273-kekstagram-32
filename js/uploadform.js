@@ -1,5 +1,3 @@
-// import { tracksEscKeystrokes } from './functions.js';
-
 const uploadSelectImage = document.querySelector('.img-upload__form');
 const imgUploadOverlay = document.querySelector('.img-upload__overlay');
 const imgUploadcancel = document.querySelector('.img-upload__cancel');
@@ -12,6 +10,11 @@ const hashtagLength = {
   MIN: 2,
   MAX: 20
 };
+const hashtagCount = {
+  MAX: 5
+};
+
+
 const descriptionLength = 14;
 
 
@@ -24,13 +27,9 @@ const pristine = new Pristine(uploadSelectImage, {
   errorTextClass: 'form__error'
 });
 
-// console.log(document.hasFocus(textHashtags));
-// textDescription.hasFocus();
-
-
 
 // функция скрытия кнопки
-function hiddenSubmit (value) {
+function hiddenSubmit(value) {
   if (!value) {
     imgUploadSubmit.disabled = true;
   } else {
@@ -39,55 +38,75 @@ function hiddenSubmit (value) {
 }
 
 // функция проверки хэштега
-function checkTextHashtag (text) {
-  const hashtag = /^#[a-z\u0430-\u044F\u04510-9]{1,19}$/i;
-  if (text === '') {
+const checkHashtag = (hashtag) => {
+  if (hashtag === '') {
     return true;
-  } else {
-    return hashtag.test(text);
+  } else if (!hashtag.startsWith('#')) {
+    return false;
+  } else if (hashtag.lastIndexOf('#') !== 0) {
+    return false;
+  } else if (hashtag.length === hashtagLength.MIN - 1) {
+    return false;
+  } else if (hashtag.length > hashtagLength.MAX) {
+    return false;
+  } else if (!(/^#[a-z\u0430-\u044F\u04510-9]{1,19}$/i).test(hashtag)) {
+    return false;
   }
-}
+  return true;
+};
+
+// функция проверки текста поля хэштега
+const checkTextHashtag = (text) => {
+  const arrayHashtags = text.split(' ');
+  if (arrayHashtags.length > hashtagCount.MAX) {
+    return false;
+  }
+  return arrayHashtags.every(checkHashtag);
+};
 
 // функция вывода ошибки хэштега
-function errorTextHashtag (text) {
-
-  if (!text.startsWith('#')) {
-    return 'Хэштег должен начинаться c одного символа "#"!';
-  } else if (text.lastIndexOf('#') !== 0) {
-    return 'Хэштег должен содержать только один символ "#"!';
-  } else if (text.length === hashtagLength.MIN - 1){
-    return 'Хэштег должен содержать "#" и 1 символ!';
-  } else if (text.length > hashtagLength.MAX){
-    return 'Хэштег должен содержать не более 20 символов!';
-  } else if (!(/^#[a-z\u0430-\u044F\u04510-9]{1,19}$/i).test(text)) {
-    return 'Хэштег может содержать только буквы и цифры!';
-  } else if (text.includes(' ')) {
-    return 'Хэштег не может содержать пробелы!';
+function errorTextHashtag(text) {
+  const mask = /^#[a-z\u0430-\u044F\u04510-9]{1,19}$/i;
+  const arrayHashtags = text.split(' ');
+  if (arrayHashtags.length > hashtagCount.MAX) {
+    return 'Максимальное количество хэштегов 5!';
+  }
+  for (const item of arrayHashtags) {
+    if (!item.startsWith('#')) {
+      return `"${item}" — Хэштег должен начинаться c одного символа "#"!`;
+    } else if (item.lastIndexOf('#') !== 0) {
+      return `"${item}" — Хэштег должен содержать только один символ "#"!`;
+    } else if (item.length === hashtagLength.MIN - 1) {
+      return `"${item}" — Хэштег должен содержать "#" и 1 символ!`;
+    } else if (item.length > hashtagLength.MAX) {
+      return `"${item}" — Хэштег должен содержать не более 20 символов!`;
+    } else if (!mask.test(item)) {
+      return `"${item}" — Хэштег может содержать только буквы и цифры!`;
+    }
   }
 }
 
 
 // функция проверки комментария
-function checkTextDescription (text) {
+function checkTextDescription(text) {
+  hiddenSubmit(text.length <= descriptionLength);
   return text.length <= descriptionLength;
 }
 
 // функция вывода ошибки комментария
-function errorTextDescription () {
-  return 'Максимальная длина комментария 140 символов!';
+function errorTextDescription() {
+  return `Максимальная длина комментария ${descriptionLength} символов!`;
 }
 
-//
+// функция проверки формы перед отправкой
 const checkingForm = (evt) => {
-
-  evt.preventDefault();
-
   const isValid = pristine.validate();
 
   if (isValid) {
-    console.log('Форма заполнена верно');
+    // console.log('Форма заполнена верно');
   } else {
-    console.log('Форма заполнена неверно');
+    evt.preventDefault();
+    // console.log('Форма заполнена неверно');
   }
 };
 
@@ -107,7 +126,7 @@ const uploadClose = () => {
 
 // функция отслеживания нажатия Esc
 const tracksEscKeystrokes = (evt) => {
-  if (evt.key === 'Escape') {
+  if (evt.key === 'Escape' && document.activeElement !== textHashtags && document.activeElement !== textDescription) {
     uploadClose();
     document.removeEventListener('keydown', tracksEscKeystrokes);
   }
@@ -134,8 +153,6 @@ const uploadOpen = () => {
 
   uploadClose();
 };
-
-
 
 
 export { uploadOpen };
