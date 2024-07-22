@@ -6,6 +6,7 @@ const imgUploadSubmit = document.querySelector('.img-upload__submit');
 const textHashtags = document.querySelector('.text__hashtags');
 const textDescription = document.querySelector('.text__description');
 
+
 const hashtagLength = {
   MIN: 2,
   MAX: 20
@@ -21,7 +22,7 @@ const descriptionLength = 14;
 const pristine = new Pristine(uploadSelectImage, {
   classTo: 'img-upload__field-wrapper', // что проверять
   errorClass: 'img-upload__field-wrapper--error', // добавить класс ошибки
-  // successClass: 'img-upload__field-wrapper', // удалить класс
+  successClass: 'img-upload__field-wrapper', // удалить класс
   errorTextParent: 'img-upload__field-wrapper', // куда вставлять ошибку
   errorTextTag: 'div',
   errorTextClass: 'form__error'
@@ -37,54 +38,50 @@ function hiddenSubmit(value) {
   }
 }
 
+// функция вывода ошибки хэштега
+const errorTextHashtag = new function (error) {
+  this.answer = error;
+  this.a = () => this.answer;
+};
+
+
 // функция проверки хэштега
 const checkHashtag = (hashtag) => {
-  if (hashtag === '') {
-    return true;
-  } else if (!hashtag.startsWith('#')) {
+  const mask = /^#[a-z\u0430-\u044F\u04510-9]{1,19}$/i;
+  if (!hashtag.startsWith('#')) {
+    errorTextHashtag.answer = `"${hashtag}" — Хэштег должен начинаться c символа "#"!`;
     return false;
   } else if (hashtag.lastIndexOf('#') !== 0) {
+    errorTextHashtag.answer = `"${hashtag}" — Хэштег должен содержать только один символ "#"!`;
     return false;
   } else if (hashtag.length === hashtagLength.MIN - 1) {
+    errorTextHashtag.answer = `"${hashtag}" — Хэштег должен содержать "#" и 1 символ!`;
     return false;
   } else if (hashtag.length > hashtagLength.MAX) {
+    errorTextHashtag.answer = `"${hashtag}" — Хэштег должен содержать не более 20 символов!`;
     return false;
-  } else if (!(/^#[a-z\u0430-\u044F\u04510-9]{1,19}$/i).test(hashtag)) {
+  } else if (!mask.test(hashtag)) {
+    errorTextHashtag.answer = `"${hashtag}" — Хэштег может содержать только буквы и цифры!`;
     return false;
   }
   return true;
 };
 
+
 // функция проверки текста поля хэштега
 const checkTextHashtag = (text) => {
-  const arrayHashtags = text.split(' ');
-  if (arrayHashtags.length > hashtagCount.MAX) {
-    return false;
-  }
-  return arrayHashtags.every(checkHashtag);
-};
-
-// функция вывода ошибки хэштега
-function errorTextHashtag(text) {
-  const mask = /^#[a-z\u0430-\u044F\u04510-9]{1,19}$/i;
-  const arrayHashtags = text.split(' ');
-  if (arrayHashtags.length > hashtagCount.MAX) {
-    return 'Максимальное количество хэштегов 5!';
-  }
-  for (const item of arrayHashtags) {
-    if (!item.startsWith('#')) {
-      return `"${item}" — Хэштег должен начинаться c одного символа "#"!`;
-    } else if (item.lastIndexOf('#') !== 0) {
-      return `"${item}" — Хэштег должен содержать только один символ "#"!`;
-    } else if (item.length === hashtagLength.MIN - 1) {
-      return `"${item}" — Хэштег должен содержать "#" и 1 символ!`;
-    } else if (item.length > hashtagLength.MAX) {
-      return `"${item}" — Хэштег должен содержать не более 20 символов!`;
-    } else if (!mask.test(item)) {
-      return `"${item}" — Хэштег может содержать только буквы и цифры!`;
+  if (text.trim()) {
+    const arrayHashtags = text.trim().split(/\s+/).filter((item) => item.startsWith('#'));
+    if (arrayHashtags.length > hashtagCount.MAX) {
+      errorTextHashtag.answer = `Максимальное количество хэштегов - ${hashtagCount.MAX}! Вы ввели ${arrayHashtags.length}`;
+      return false;
+    } else {
+      return arrayHashtags.every(checkHashtag);
     }
+  } else {
+    return true;
   }
-}
+};
 
 
 // функция проверки комментария
@@ -148,7 +145,7 @@ const uploadOpen = () => {
   });
 
 
-  pristine.addValidator(textHashtags, checkTextHashtag, errorTextHashtag);
+  pristine.addValidator(textHashtags, checkTextHashtag, errorTextHashtag.a);
   pristine.addValidator(textDescription, checkTextDescription, errorTextDescription);
 
   uploadClose();
