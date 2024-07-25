@@ -1,5 +1,5 @@
 import { transformImage } from './image_scale.js';
-// import { imgUploadPreviewContainer } from './image_filter.js';
+
 
 const uploadSelectImage = document.querySelector('.img-upload__form');
 const imgUploadOverlay = uploadSelectImage.querySelector('.img-upload__overlay');

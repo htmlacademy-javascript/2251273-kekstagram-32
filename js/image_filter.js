@@ -1,34 +1,115 @@
 // сырой работаю над слайдером
-const imgUploadPreviewContainer = document.querySelector('.img-upload__preview-container');
-const effectLevelSlider = imgUploadPreviewContainer.querySelector('.effect-level__slider');
-// const effectLevelValue = imgUploadPreviewContainer.querySelector('.effect-level__value');
-const imgUploadEffects = imgUploadPreviewContainer.querySelector('.img-upload__effects');
+const sliderContainer = document.querySelector('.img-upload__effect-level');
+const slider = sliderContainer.querySelector('.effect-level__slider');
+const effectValue = sliderContainer.querySelector('.effect-level__value');
 
-imgUploadEffects.addEventListener('change', () => {
-  // console.log('change');
-});
+const effects = document.querySelector('.img-upload__effects');
+
+const filterSettings = {
+  none: {
+    range: {
+      min: 0,
+      max: 100,
+    },
+    start: 100,
+    step: 1,
+    style: 'none',
+  },
+  chrome: {
+    range: {
+      min: 0,
+      max: 1
+    },
+    start: 1,
+    step: 0.1,
+    style: 'grayscale',
+  },
+  sepia: {
+    range: {
+      min: 0,
+      max: 1,
+    },
+    start: 1,
+    step: 0.1,
+    style: 'sepia',
+  },
+  marvin: {
+    range: {
+      min: 0,
+      max: 100,
+    },
+    start: 100,
+    step: 1,
+    style: 'invert',
+    unit: '%',
+  },
+  phobos: {
+    range: {
+      min: 0,
+      max: 3,
+    },
+    start: 3,
+    step: 0.1,
+    style: 'blur',
+    unit: 'px',
+  },
+  heat: {
+    range: {
+      min: 1,
+      max: 3,
+    },
+    start: 3,
+    step: 0.1,
+    style: 'brightness',
+  },
+};
 
 
-// console.log(document.activeElement);
+// функция скрытия слайдера
+const hideSlider = () => {
+  sliderContainer.classList.add('hidden');
+};
 
 
-noUiSlider.create(effectLevelSlider, {
+// функция отображения слайдера
+const showSlider = () => {
+  sliderContainer.classList.remove('hidden');
+};
+
+
+hideSlider();
+
+
+noUiSlider.create(slider, {
   range: {
     min: 0,
     max: 100,
   },
-  start: 100,
+  start: 50,
   step: 10,
   connect: 'lower'
 });
 
+
+// функция обновления слайдера
 const updateSlider = () => {
-  // const value = effectLevelSlider.noUiSlider.get();
-  // console.log(value);
+  effectValue.value = slider.noUiSlider.get();
+};
+
+// функция выбора эффекта
+const setFilter = () => {
+  const effect = effects.querySelector('input:checked').value;
+  if (effect === 'none') {
+    hideSlider();
+  } else {
+    showSlider();
+    slider.noUiSlider.updateOptions(filterSettings[effect]);
+  }
 };
 
 
-effectLevelSlider.noUiSlider.on('update', updateSlider);
+effects.addEventListener('change', setFilter);
+slider.noUiSlider.on('update', updateSlider);
 
 
-export { imgUploadPreviewContainer };
+export { sliderContainer };
