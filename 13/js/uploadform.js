@@ -1,95 +1,98 @@
-const uploadSelectImage = document.querySelector('.img-upload__form');
-const imgUploadOverlay = document.querySelector('.img-upload__overlay');
-const imgUploadcancel = document.querySelector('.img-upload__cancel');
-const imgUploadSubmit = document.querySelector('.img-upload__submit');
+import { transformImage } from './image_scale.js';
+// import { imgUploadPreviewContainer } from './image_filter.js';
 
-const textHashtags = document.querySelector('.text__hashtags');
-const textDescription = document.querySelector('.text__description');
+const uploadSelectImage = document.querySelector('.img-upload__form');
+const imgUploadOverlay = uploadSelectImage.querySelector('.img-upload__overlay');
+const imgUploadcancel = uploadSelectImage.querySelector('.img-upload__cancel');
+const imgUploadSubmit = uploadSelectImage.querySelector('.img-upload__submit');
+const textHashtags = uploadSelectImage.querySelector('.text__hashtags');
+const textDescription = uploadSelectImage.querySelector('.text__description');
+const imgUploadInput = uploadSelectImage.querySelector('.img-upload__input');
 
 const hashtagLength = {
   MIN: 2,
   MAX: 20
 };
+
 const hashtagCount = {
   MAX: 5
 };
 
-
-const descriptionLength = 14;
+const descriptionLength = 140;
 
 
 const pristine = new Pristine(uploadSelectImage, {
-  classTo: 'img-upload__field-wrapper', // что проверять
-  errorClass: 'img-upload__field-wrapper--error', // добавить класс ошибки
-  // successClass: 'img-upload__field-wrapper', // удалить класс
-  errorTextParent: 'img-upload__field-wrapper', // куда вставлять ошибку
+  classTo: 'img-upload__field-wrapper',
+  errorClass: 'img-upload__field-wrapper--error',
+  successClass: 'img-upload__field-wrapper',
+  errorTextParent: 'img-upload__field-wrapper',
   errorTextTag: 'div',
   errorTextClass: 'form__error'
 });
 
 
-// функция скрытия кнопки
-function hiddenSubmit(value) {
-  if (!value) {
-    imgUploadSubmit.disabled = true;
-  } else {
-    imgUploadSubmit.disabled = false;
-  }
-}
-
-// функция проверки хэштега
-const checkHashtag = (hashtag) => {
-  if (hashtag === '') {
-    return true;
-  } else if (!hashtag.startsWith('#')) {
-    return false;
-  } else if (hashtag.lastIndexOf('#') !== 0) {
-    return false;
-  } else if (hashtag.length === hashtagLength.MIN - 1) {
-    return false;
-  } else if (hashtag.length > hashtagLength.MAX) {
-    return false;
-  } else if (!(/^#[a-z\u0430-\u044F\u04510-9]{1,19}$/i).test(hashtag)) {
-    return false;
-  }
-  return true;
-};
-
-// функция проверки текста поля хэштега
-const checkTextHashtag = (text) => {
-  const arrayHashtags = text.split(' ');
-  if (arrayHashtags.length > hashtagCount.MAX) {
-    return false;
-  }
-  return arrayHashtags.every(checkHashtag);
-};
-
-// функция вывода ошибки хэштега
-function errorTextHashtag(text) {
-  const mask = /^#[a-z\u0430-\u044F\u04510-9]{1,19}$/i;
-  const arrayHashtags = text.split(' ');
-  if (arrayHashtags.length > hashtagCount.MAX) {
-    return 'Максимальное количество хэштегов 5!';
-  }
-  for (const item of arrayHashtags) {
-    if (!item.startsWith('#')) {
-      return `"${item}" — Хэштег должен начинаться c одного символа "#"!`;
-    } else if (item.lastIndexOf('#') !== 0) {
-      return `"${item}" — Хэштег должен содержать только один символ "#"!`;
-    } else if (item.length === hashtagLength.MIN - 1) {
-      return `"${item}" — Хэштег должен содержать "#" и 1 символ!`;
-    } else if (item.length > hashtagLength.MAX) {
-      return `"${item}" — Хэштег должен содержать не более 20 символов!`;
-    } else if (!mask.test(item)) {
-      return `"${item}" — Хэштег может содержать только буквы и цифры!`;
+// функция проверки строки хэштега
+const checkingHashtag = new function () {
+  this.textError = '';
+  this.error = () => this.textError;
+  this.checkHashtag = (hashtag) => {
+    const mask = /^#[a-z\u0430-\u044F\u04510-9]{1,19}$/i;
+    if (!hashtag.startsWith('#')) {
+      this.textError = `"${hashtag}" — Хэштег должен начинаться c символа "#"!`;
+      return false;
+    } else if (hashtag.lastIndexOf('#') !== 0) {
+      this.textError = `"${hashtag}" — Хэштег должен содержать только один символ "#"!`;
+      return false;
+    } else if (hashtag.length === hashtagLength.MIN - 1) {
+      this.textError = `"${hashtag}" — Хэштег должен содержать "#" и 1 символ!`;
+      return false;
+    } else if (hashtag.length > hashtagLength.MAX) {
+      this.textError = `"${hashtag}" — Хэштег должен содержать не более 20 символов!`;
+      return false;
+    } else if (!mask.test(hashtag)) {
+      this.textError = `"${hashtag}" — Хэштег может содержать только буквы и цифры!`;
+      return false;
     }
-  }
-}
-
+    this.textError = '';
+    return true;
+  };
+  this.checkDublicates = (arrayHashtags) => {
+    const arrayHashtagsLower = arrayHashtags.map((item) => item.toLowerCase());
+    const setHashtagsLower = new Set(arrayHashtagsLower);
+    let answer = [];
+    if (arrayHashtagsLower.length === setHashtagsLower.size) {
+      return true;
+    } else {
+      for (const item of arrayHashtagsLower) {
+        if (arrayHashtagsLower.indexOf(item) !== arrayHashtagsLower.lastIndexOf(item)) {
+          answer.push(item);
+        }
+      }
+      answer = [...new Set(answer)];
+      this.textError = `Хэштеги "${answer.join(', ')} "повторяются! Хэштеги не должны повторяться!(регистр не имеет значения!)`;
+      return false;
+    }
+  };
+  this.checkTextHashtag = (textHashtag) => {
+    if (!textHashtag.trim()) {
+      this.textError = '';
+      return true;
+    } else {
+      const arrayHashtags = textHashtag.trim().split(/\s+/);
+      if (arrayHashtags.length > hashtagCount.MAX) {
+        this.textError = `Максимальное количество хэштегов - ${hashtagCount.MAX}!`;
+        return false;
+      } else if (!this.checkDublicates(arrayHashtags)) {
+        return false;
+      } else {
+        return arrayHashtags.every(this.checkHashtag);
+      }
+    }
+  };
+};
 
 // функция проверки комментария
 function checkTextDescription(text) {
-  hiddenSubmit(text.length <= descriptionLength);
   return text.length <= descriptionLength;
 }
 
@@ -101,33 +104,31 @@ function errorTextDescription() {
 // функция проверки формы перед отправкой
 const checkingForm = (evt) => {
   const isValid = pristine.validate();
-
   if (isValid) {
-    // console.log('Форма заполнена верно');
+    imgUploadSubmit.disabled = false; // console.log('Форма заполнена верно');
   } else {
     evt.preventDefault();
-    // console.log('Форма заполнена неверно');
+    imgUploadSubmit.disabled = true; // console.log('Форма заполнена неверно');
   }
 };
 
-
 // функция отправки формы
 const uploadSubmit = () => {
-  uploadSelectImage.addEventListener('submit', checkingForm);
+  uploadSelectImage.addEventListener('input', checkingForm);
 };
-
 
 // функция закрытия формы загрузки картинки
 const uploadClose = () => {
   imgUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  uploadSelectImage.removeEventListener('submit', checkingForm);
+  uploadSelectImage.removeEventListener('input', checkingForm);
 };
 
 // функция отслеживания нажатия Esc
 const tracksEscKeystrokes = (evt) => {
   if (evt.key === 'Escape' && document.activeElement !== textHashtags && document.activeElement !== textDescription) {
     uploadClose();
+    imgUploadInput.value = '';
     document.removeEventListener('keydown', tracksEscKeystrokes);
   }
 };
@@ -147,9 +148,10 @@ const uploadOpen = () => {
     document.removeEventListener('keydown', tracksEscKeystrokes);
   });
 
-
-  pristine.addValidator(textHashtags, checkTextHashtag, errorTextHashtag);
+  pristine.addValidator(textHashtags, checkingHashtag.checkTextHashtag, checkingHashtag.error);
   pristine.addValidator(textDescription, checkTextDescription, errorTextDescription);
+
+  transformImage();
 
   uploadClose();
 };
