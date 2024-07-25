@@ -1,3 +1,4 @@
+// сырой работаю над слайдером
 const imgUploadPreviewContainer = document.querySelector('.img-upload__preview-container');
 const effectLevelSlider = imgUploadPreviewContainer.querySelector('.effect-level__slider');
 // const effectLevelValue = imgUploadPreviewContainer.querySelector('.effect-level__value');
