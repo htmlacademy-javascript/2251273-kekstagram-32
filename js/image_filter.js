@@ -1,19 +1,24 @@
 // сырой работаю над слайдером
-const sliderContainer = document.querySelector('.img-upload__effect-level');
+const previewContainer = document.querySelector('.img-upload__preview-container');
+const imgUploadPreview = previewContainer.querySelector('.img-upload__preview img');
+
+const sliderContainer = previewContainer.querySelector('.img-upload__effect-level');
 const slider = sliderContainer.querySelector('.effect-level__slider');
-const effectValue = sliderContainer.querySelector('.effect-level__value');
 
 const effects = document.querySelector('.img-upload__effects');
+// const effect = effects.querySelector('input:checked').value;
 
+
+// настройки слайдера
 const filterSettings = {
   none: {
     range: {
       min: 0,
-      max: 100,
+      max: 100
     },
     start: 100,
     step: 1,
-    style: 'none',
+    style: 'none'
   },
   chrome: {
     range: {
@@ -22,36 +27,36 @@ const filterSettings = {
     },
     start: 1,
     step: 0.1,
-    style: 'grayscale',
+    style: 'grayscale'
   },
   sepia: {
     range: {
       min: 0,
-      max: 1,
+      max: 1
     },
     start: 1,
     step: 0.1,
-    style: 'sepia',
+    style: 'sepia'
   },
   marvin: {
     range: {
       min: 0,
-      max: 100,
+      max: 100
     },
     start: 100,
     step: 1,
     style: 'invert',
-    unit: '%',
+    unit: '%'
   },
   phobos: {
     range: {
       min: 0,
-      max: 3,
+      max: 3
     },
     start: 3,
     step: 0.1,
     style: 'blur',
-    unit: 'px',
+    unit: 'px'
   },
   heat: {
     range: {
@@ -60,7 +65,7 @@ const filterSettings = {
     },
     start: 3,
     step: 0.1,
-    style: 'brightness',
+    style: 'brightness'
   },
 };
 
@@ -91,25 +96,42 @@ noUiSlider.create(slider, {
 });
 
 
-// функция обновления слайдера
-const updateSlider = () => {
-  effectValue.value = slider.noUiSlider.get();
-};
-
-// функция выбора эффекта
-const setFilter = () => {
-  const effect = effects.querySelector('input:checked').value;
-  if (effect === 'none') {
-    hideSlider();
+//
+const updateEffect = (effect, value) => {
+  if (effect !== 'none') {
+    return `${filterSettings[effect].style}(${value}${filterSettings[effect].unit || ''})`;
   } else {
-    showSlider();
-    slider.noUiSlider.updateOptions(filterSettings[effect]);
+    return 'none';
   }
 };
 
 
+// функция обновления слайдера
+const updateSlider = () => {
+  const effect = effects.querySelector('input:checked').value;
+
+  const value = slider.noUiSlider.get();
+
+  imgUploadPreview.style.filter = updateEffect(effect, value);
+};
+
+
+// функция выбора эффекта
+const setFilter = () => {
+  const effect = effects.querySelector('input:checked').value;
+
+  if (effect === 'none') {
+    hideSlider();
+  } else {
+    showSlider();
+  }
+
+  slider.noUiSlider.updateOptions(filterSettings[effect]);
+  slider.noUiSlider.on('update', updateSlider);
+};
+
+
 effects.addEventListener('change', setFilter);
-slider.noUiSlider.on('update', updateSlider);
 
 
 export { sliderContainer };

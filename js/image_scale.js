@@ -1,5 +1,5 @@
 const imgUploadPreviewContainer = document.querySelector('.img-upload__preview-container');
-const imgUploadPreview = imgUploadPreviewContainer.querySelector('.img-upload__preview').querySelector('img');
+const imgUploadPreview = imgUploadPreviewContainer.querySelector('.img-upload__preview img');
 
 const scaleControlValue = imgUploadPreviewContainer.querySelector('.scale__control--value');
 
