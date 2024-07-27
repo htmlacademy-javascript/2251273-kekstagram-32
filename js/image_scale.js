@@ -35,6 +35,8 @@ const increaseImage = () => {
 
 // функции контроля изменения масштаба
 const transformImage = () => {
+  scaleImage();
+
   decreaseImageButton.addEventListener('click', decreaseImage);
   increaseImageButton.addEventListener('click', increaseImage);
 };

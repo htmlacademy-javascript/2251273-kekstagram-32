@@ -1,4 +1,3 @@
-// сырой работаю над слайдером
 const previewContainer = document.querySelector('.img-upload__preview-container');
 const imgUploadPreview = previewContainer.querySelector('.img-upload__preview img');
 
@@ -6,7 +5,17 @@ const sliderContainer = previewContainer.querySelector('.img-upload__effect-leve
 const slider = sliderContainer.querySelector('.effect-level__slider');
 
 const effects = document.querySelector('.img-upload__effects');
-// const effect = effects.querySelector('input:checked').value;
+
+// создание слайдера
+noUiSlider.create(slider, {
+  range: {
+    min: 0,
+    max: 100,
+  },
+  start: 100,
+  step: 10,
+  connect: 'lower'
+});
 
 
 // настройки слайдера
@@ -70,68 +79,44 @@ const filterSettings = {
 };
 
 
-// функция скрытия слайдера
-const hideSlider = () => {
-  sliderContainer.classList.add('hidden');
-};
-
+// функция получения эффекта
+const getEffect = () => effects.querySelector('input:checked').value;
 
 // функция отображения слайдера
-const showSlider = () => {
-  sliderContainer.classList.remove('hidden');
-};
-
-
-hideSlider();
-
-
-noUiSlider.create(slider, {
-  range: {
-    min: 0,
-    max: 100,
-  },
-  start: 50,
-  step: 10,
-  connect: 'lower'
-});
-
-
-//
-const updateEffect = (effect, value) => {
+const displaySlider = (effect = 'none') => {
   if (effect !== 'none') {
-    return `${filterSettings[effect].style}(${value}${filterSettings[effect].unit || ''})`;
+    sliderContainer.classList.remove('hidden');
   } else {
-    return 'none';
+    sliderContainer.classList.add('hidden');
   }
 };
 
+// функция обновления эффекта
+const updateEffect = (effect = 'none', value) => {
+  displaySlider(effect);
+
+  if (effect !== 'none') {
+    imgUploadPreview.style.filter = `${filterSettings[effect].style}(${value}${filterSettings[effect].unit || ''})` || 'none';
+  } else {
+    imgUploadPreview.style.filter = 'none';
+  }
+};
 
 // функция обновления слайдера
 const updateSlider = () => {
-  const effect = effects.querySelector('input:checked').value;
-
-  const value = slider.noUiSlider.get();
-
-  imgUploadPreview.style.filter = updateEffect(effect, value);
+  updateEffect(getEffect(), slider.noUiSlider.get());
 };
-
 
 // функция выбора эффекта
 const setFilter = () => {
-  const effect = effects.querySelector('input:checked').value;
+  slider.noUiSlider.updateOptions(filterSettings[getEffect()]);
+};
 
-  if (effect === 'none') {
-    hideSlider();
-  } else {
-    showSlider();
-  }
-
-  slider.noUiSlider.updateOptions(filterSettings[effect]);
+// функция
+const createSlider = () => {
   slider.noUiSlider.on('update', updateSlider);
+  effects.addEventListener('change', setFilter);
 };
 
 
-effects.addEventListener('change', setFilter);
-
-
-export { sliderContainer };
+export { createSlider };

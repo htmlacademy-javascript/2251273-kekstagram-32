@@ -1,4 +1,5 @@
 import { transformImage } from './image_scale.js';
+import { createSlider } from './image_filter.js';
 
 
 const uploadSelectImage = document.querySelector('.img-upload__form');
@@ -69,7 +70,7 @@ const checkingHashtag = new function () {
         }
       }
       answer = [...new Set(answer)];
-      this.textError = `Хэштеги "${answer.join(', ')} "повторяются! Хэштеги не должны повторяться!(регистр не имеет значения!)`;
+      this.textError = `Хэштег${answer.length > 1 ? 'и' : ''}" ${answer.join(', ')} " повторя${answer.length === 1 ? 'е' : 'ю'}тся! Хэштеги не должны повторяться!(регистр не имеет значения!)`;
       return false;
     }
   };
@@ -105,10 +106,10 @@ function errorTextDescription() {
 const checkingForm = (evt) => {
   const isValid = pristine.validate();
   if (isValid) {
-    imgUploadSubmit.disabled = false; // console.log('Форма заполнена верно');
+    imgUploadSubmit.disabled = false;
   } else {
     evt.preventDefault();
-    imgUploadSubmit.disabled = true; // console.log('Форма заполнена неверно');
+    imgUploadSubmit.disabled = true;
   }
 };
 
@@ -140,6 +141,9 @@ const uploadOpen = () => {
     document.body.classList.add('modal-open');
     uploadSubmit();
 
+    transformImage();
+    createSlider();
+
     document.addEventListener('keydown', tracksEscKeystrokes);
   });
 
@@ -150,8 +154,6 @@ const uploadOpen = () => {
 
   pristine.addValidator(textHashtags, checkingHashtag.checkTextHashtag, checkingHashtag.error);
   pristine.addValidator(textDescription, checkTextDescription, errorTextDescription);
-
-  transformImage();
 
   uploadClose();
 };
