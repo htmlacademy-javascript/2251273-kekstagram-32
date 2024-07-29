@@ -6,7 +6,7 @@ const slider = sliderContainer.querySelector('.effect-level__slider');
 
 const effects = document.querySelector('.img-upload__effects');
 
-const effectLevelValue = sliderContainer.querySelector('.effect-level__value');
+const effectLevelValue = document.querySelector('.effect-level__value');
 
 
 // создание слайдера
@@ -108,6 +108,7 @@ const updateEffect = (effect = 'none', value) => {
 // функция обновления слайдера
 const updateSlider = () => {
   effectLevelValue.value = slider.noUiSlider.get();
+
   updateEffect(getEffect(), effectLevelValue.value);
 };
 
