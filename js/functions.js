@@ -1,3 +1,12 @@
+// функция отслеживания нажатия Esc
+const tracksEscKeystrokes = (evt, cb) => {
+  if (evt.key === 'Escape') {
+    cb();
+    document.removeEventListener('keydown', tracksEscKeystrokes);
+  }
+};
+
+
 // функция проверки длины строки
 function lengthString(string, length) {
   return string.length <= length;
@@ -53,4 +62,4 @@ const getMinutes = function (timeDay) {
 const isWorkingHours = (beginningWork, endWork, beginningMeeting, durationMeeting) => getMinutes(beginningWork) <= getMinutes(beginningMeeting) && getMinutes(beginningMeeting) + durationMeeting <= getMinutes(endWork);
 
 
-export { lengthString, isPalindrome, isPalindrome2, filterNumber, filterNumber2, getRandomInt, isWorkingHours };
+export { tracksEscKeystrokes, lengthString, isPalindrome, isPalindrome2, filterNumber, filterNumber2, getRandomInt, isWorkingHours };
