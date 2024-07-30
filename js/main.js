@@ -1,12 +1,8 @@
-import { PHOTOS } from './data.js';
+import { getData, downloadErrorOuput } from './get_data.js';
 import { drawsPhotos } from './photos.js';
+import './send_data.js';
 import { uploadOpen } from './uploadform.js';
-import './image_filter.js';
 
+getData((data) => drawsPhotos(data), () => downloadErrorOuput());
 
-drawsPhotos(PHOTOS);
 uploadOpen();
-
-
-export { PHOTOS };
-

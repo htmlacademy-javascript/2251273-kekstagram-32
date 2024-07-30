@@ -1,5 +1,6 @@
 import { transformImage } from './image_scale.js';
 import { createSlider } from './image_filter.js';
+import { sendData } from './send_data.js';
 
 
 const uploadSelectImage = document.querySelector('.img-upload__form');
@@ -9,6 +10,9 @@ const imgUploadSubmit = uploadSelectImage.querySelector('.img-upload__submit');
 const textHashtags = uploadSelectImage.querySelector('.text__hashtags');
 const textDescription = uploadSelectImage.querySelector('.text__description');
 const imgUploadInput = uploadSelectImage.querySelector('.img-upload__input');
+
+const submitError = document.querySelector('#error').content.querySelector('.error');
+
 
 const hashtagLength = {
   MIN: 2,
@@ -102,20 +106,20 @@ function errorTextDescription() {
   return `Максимальная длина комментария ${descriptionLength} символов!`;
 }
 
+// функция вывода ошибки
+const submitErrorOuput = () => {
+  document.body.append(submitError);
+  console.log();
+};
+
 // функция проверки формы перед отправкой
-const checkingForm = (evt) => {
+const checkingForm = () => {
   const isValid = pristine.validate();
   if (isValid) {
     imgUploadSubmit.disabled = false;
   } else {
-    evt.preventDefault();
     imgUploadSubmit.disabled = true;
   }
-};
-
-// функция отправки формы
-const uploadSubmit = () => {
-  uploadSelectImage.addEventListener('input', checkingForm);
 };
 
 // функция закрытия формы загрузки картинки
@@ -124,6 +128,29 @@ const uploadClose = () => {
   document.body.classList.remove('modal-open');
   uploadSelectImage.removeEventListener('input', checkingForm);
 };
+
+
+//
+const submitForm = (evt) => {
+  evt.preventDefault();
+
+  const isValid = pristine.validate();
+
+  const formDate = new FormData(uploadSelectImage);
+
+  if (isValid) {
+
+    sendData(uploadClose, submitErrorOuput, formDate);
+
+  }
+};
+
+// функция отправки формы
+const uploadSubmit = () => {
+  uploadSelectImage.addEventListener('input', checkingForm);
+  uploadSelectImage.addEventListener('submit', submitForm);
+};
+
 
 // функция отслеживания нажатия Esc
 const tracksEscKeystrokes = (evt) => {

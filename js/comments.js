@@ -1,8 +1,4 @@
-import { getRandomInt } from './functions.js';
-import { NUM_AVATARS } from './data.js';
-
 const commentShownCount = 5;
-
 
 // функция отрисовки количества коментариев
 const showNumberComments = (pictureCloned, comments) => {
@@ -22,7 +18,6 @@ const showNumberComments = (pictureCloned, comments) => {
   socialCommentShownCount.textContent = socialComments.childElementCount;
   socialCommentTotalCount.textContent = comments.length;
 };
-
 
 // функция отрисовки коментария
 const createComment = (comment) => {
@@ -55,28 +50,6 @@ const showNextComents = (pictureCloned, comments, displayedComments) => {
   showNumberComments(pictureCloned, comments);
 };
 
-
-// функция добавления коментария
-const addComment = (pictureCloned, comments) => {
-  const socialComments = pictureCloned.querySelector('.social__comments');
-  const socialFooterText = pictureCloned.querySelector('.social__footer-text');
-  const socialFooterBtn = pictureCloned.querySelector('.social__footer-btn');
-
-  socialFooterBtn.addEventListener('click', () => {
-    if (socialFooterText.value !== '') {
-      comments.push({id: 1,
-        avatar: `img/avatar-${getRandomInt(NUM_AVATARS.MIN, NUM_AVATARS.MAX)}.svg`,
-        message: `${socialFooterText.value}`,
-        name: 'Елизавета Сорокина'});
-      socialFooterText.value = '';
-      showNextComents(pictureCloned, comments.slice(socialComments.childElementCount,));
-      showNumberComments(pictureCloned, comments);
-    }
-  });
-
-};
-
-
 // функция отрисовки коментариев
 const drawsComments = (pictureCloned, comments) => {
   const socialComments = pictureCloned.querySelector('.social__comments');
@@ -86,8 +59,6 @@ const drawsComments = (pictureCloned, comments) => {
 
   const socialCommentsLoader = pictureCloned.querySelector('.social__comments-loader');
   showNextComents(pictureCloned, comments, displayedComments);
-
-  addComment(pictureCloned, comments);
 
   socialCommentsLoader.addEventListener('click', () => {
     showNextComents(pictureCloned, comments, displayedComments += commentShownCount);
