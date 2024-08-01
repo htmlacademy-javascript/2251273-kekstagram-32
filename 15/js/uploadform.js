@@ -106,7 +106,7 @@ const submitForm = (evt) => {
   const isValid = pristine.validate();
   const formDate = new FormData(uploadSelectImage);
   if (isValid) {
-    sendData(submitSuccessOuput, submitErrorOuput, formDate, imgUploadSubmit);
+    sendData(submitSuccessOuput, submitErrorOuput, formDate);
   }
 };
 
