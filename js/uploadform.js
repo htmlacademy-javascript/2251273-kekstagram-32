@@ -1,6 +1,7 @@
 import { transformImage } from './image_scale.js';
 import { createSlider } from './image_filter.js';
 import { sendData } from './send_data.js';
+import { checkingHashtag } from './cheking_hashtag.js';
 
 
 const uploadSelectImage = document.querySelector('.img-upload__form');
@@ -12,16 +13,8 @@ const textDescription = uploadSelectImage.querySelector('.text__description');
 const imgUploadInput = uploadSelectImage.querySelector('.img-upload__input');
 
 const submitError = document.querySelector('#error').content.querySelector('.error');
+const submitSuccess = document.querySelector('#success').content.querySelector('.success');
 
-
-const hashtagLength = {
-  MIN: 2,
-  MAX: 20
-};
-
-const hashtagCount = {
-  MAX: 5
-};
 
 const descriptionLength = 140;
 
@@ -36,66 +29,6 @@ const pristine = new Pristine(uploadSelectImage, {
 });
 
 
-// функция проверки строки хэштега
-const checkingHashtag = new function () {
-  this.textError = '';
-  this.error = () => this.textError;
-  this.checkHashtag = (hashtag) => {
-    const mask = /^#[a-z\u0430-\u044F\u04510-9]{1,19}$/i;
-    if (!hashtag.startsWith('#')) {
-      this.textError = `"${hashtag}" — Хэштег должен начинаться c символа "#"!`;
-      return false;
-    } else if (hashtag.lastIndexOf('#') !== 0) {
-      this.textError = `"${hashtag}" — Хэштег должен содержать только один символ "#"!`;
-      return false;
-    } else if (hashtag.length === hashtagLength.MIN - 1) {
-      this.textError = `"${hashtag}" — Хэштег должен содержать "#" и 1 символ!`;
-      return false;
-    } else if (hashtag.length > hashtagLength.MAX) {
-      this.textError = `"${hashtag}" — Хэштег должен содержать не более 20 символов!`;
-      return false;
-    } else if (!mask.test(hashtag)) {
-      this.textError = `"${hashtag}" — Хэштег может содержать только буквы и цифры!`;
-      return false;
-    }
-    this.textError = '';
-    return true;
-  };
-  this.checkDublicates = (arrayHashtags) => {
-    const arrayHashtagsLower = arrayHashtags.map((item) => item.toLowerCase());
-    const setHashtagsLower = new Set(arrayHashtagsLower);
-    let answer = [];
-    if (arrayHashtagsLower.length === setHashtagsLower.size) {
-      return true;
-    } else {
-      for (const item of arrayHashtagsLower) {
-        if (arrayHashtagsLower.indexOf(item) !== arrayHashtagsLower.lastIndexOf(item)) {
-          answer.push(item);
-        }
-      }
-      answer = [...new Set(answer)];
-      this.textError = `Хэштег${answer.length > 1 ? 'и' : ''}" ${answer.join(', ')} " повторя${answer.length === 1 ? 'е' : 'ю'}тся! Хэштеги не должны повторяться!(регистр не имеет значения!)`;
-      return false;
-    }
-  };
-  this.checkTextHashtag = (textHashtag) => {
-    if (!textHashtag.trim()) {
-      this.textError = '';
-      return true;
-    } else {
-      const arrayHashtags = textHashtag.trim().split(/\s+/);
-      if (arrayHashtags.length > hashtagCount.MAX) {
-        this.textError = `Максимальное количество хэштегов - ${hashtagCount.MAX}!`;
-        return false;
-      } else if (!this.checkDublicates(arrayHashtags)) {
-        return false;
-      } else {
-        return arrayHashtags.every(this.checkHashtag);
-      }
-    }
-  };
-};
-
 // функция проверки комментария
 function checkTextDescription(text) {
   return text.length <= descriptionLength;
@@ -106,11 +39,6 @@ function errorTextDescription() {
   return `Максимальная длина комментария ${descriptionLength} символов!`;
 }
 
-// функция вывода ошибки
-const submitErrorOuput = () => {
-  document.body.append(submitError);
-  console.log();
-};
 
 // функция проверки формы перед отправкой
 const checkingForm = () => {
@@ -124,26 +52,64 @@ const checkingForm = () => {
 
 // функция закрытия формы загрузки картинки
 const uploadClose = () => {
+  imgUploadInput.value = '';
   imgUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   uploadSelectImage.removeEventListener('input', checkingForm);
 };
 
-
-//
-const submitForm = (evt) => {
-  evt.preventDefault();
-
-  const isValid = pristine.validate();
-
-  const formDate = new FormData(uploadSelectImage);
-
-  if (isValid) {
-
-    sendData(uploadClose, submitErrorOuput, formDate);
-
+// функция закрытия модального окна ошибки
+const closeModalError = (evt) => {
+  const errorButton = submitError.querySelector('.error__button');
+  if (evt.target === submitError || evt.target === errorButton) {
+    errorButton.removeEventListener('click', closeModalError);
+    document.removeEventListener('click', closeModalError);
+    submitError.remove();
   }
 };
+
+// функция закрытия модального окна успешной загрузки
+const closeModalSuccess = (evt) => {
+  const successButton = submitSuccess.querySelector('.success__button');
+  if (evt.target === submitSuccess || evt.target === successButton) {
+    successButton.removeEventListener('click', closeModalSuccess);
+    document.removeEventListener('click', closeModalSuccess);
+    submitSuccess.remove();
+    uploadClose();
+  }
+};
+
+// функция вывода ошибки
+const submitErrorOuput = () => {
+  document.body.append(submitError);
+  const buttonError = submitError.querySelector('.error__button');
+
+  buttonError.addEventListener('click', closeModalError);
+  buttonError.focus();
+  document.addEventListener('click', closeModalError);
+};
+
+// функция отрисовки успешной загрузки картинки
+const submitSuccessOuput = () => {
+  uploadClose();
+  document.body.append(submitSuccess);
+  const buttonSuccess = submitSuccess.querySelector('.success__button');
+
+  buttonSuccess.addEventListener('click', closeModalSuccess);
+  buttonSuccess.focus();
+  document.addEventListener('click', closeModalSuccess);
+};
+
+// функция отправки формы
+const submitForm = (evt) => {
+  evt.preventDefault();
+  const isValid = pristine.validate();
+  const formDate = new FormData(uploadSelectImage);
+  if (isValid) {
+    sendData(submitSuccessOuput, submitErrorOuput, formDate, imgUploadSubmit);
+  }
+};
+
 
 // функция отправки формы
 const uploadSubmit = () => {
@@ -154,10 +120,20 @@ const uploadSubmit = () => {
 
 // функция отслеживания нажатия Esc
 const tracksEscKeystrokes = (evt) => {
-  if (evt.key === 'Escape' && document.activeElement !== textHashtags && document.activeElement !== textDescription) {
+  const modalError = document.querySelector('.error');
+  const modalSucces = document.querySelector('.success');
+  if (modalError !== null && evt.key === 'Escape') {
+    submitError.remove();
+    document.removeEventListener('click', closeModalError);
+
+  } else if (modalSucces !== null && evt.key === 'Escape') {
+    submitSuccess.remove();
+    document.removeEventListener('click', closeModalSuccess);
+
+  } else if (evt.key === 'Escape' && document.activeElement !== textHashtags && document.activeElement !== textDescription) {
     uploadClose();
-    imgUploadInput.value = '';
     document.removeEventListener('keydown', tracksEscKeystrokes);
+    uploadSelectImage.removeEventListener('submit', submitForm);
   }
 };
 
@@ -177,6 +153,7 @@ const uploadOpen = () => {
   imgUploadcancel.addEventListener('click', () => {
     uploadClose();
     document.removeEventListener('keydown', tracksEscKeystrokes);
+    uploadSelectImage.removeEventListener('submit', submitForm);
   });
 
   pristine.addValidator(textHashtags, checkingHashtag.checkTextHashtag, checkingHashtag.error);
@@ -184,7 +161,6 @@ const uploadOpen = () => {
 
   uploadClose();
 };
-
 
 export { uploadOpen };
 
