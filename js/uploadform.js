@@ -1,7 +1,8 @@
 import { transformImage } from './image_scale.js';
 import { createSlider } from './image_filter.js';
-import { sendData } from './send_data.js';
+import { sendData } from './api.js';
 import { checkingHashtag } from './cheking_hashtag.js';
+import { modalError, modalSucces } from './modal.js';
 
 
 const uploadSelectImage = document.querySelector('.img-upload__form');
@@ -12,8 +13,8 @@ const textHashtags = uploadSelectImage.querySelector('.text__hashtags');
 const textDescription = uploadSelectImage.querySelector('.text__description');
 const imgUploadInput = uploadSelectImage.querySelector('.img-upload__input');
 
-const submitError = document.querySelector('#error').content.querySelector('.error');
-const submitSuccess = document.querySelector('#success').content.querySelector('.success');
+// const submitError = document.querySelector('#error').content.querySelector('.error');
+// const submitSuccess = document.querySelector('#success').content.querySelector('.success');
 
 
 const descriptionLength = 140;
@@ -59,46 +60,46 @@ const uploadClose = () => {
 };
 
 // функция закрытия модального окна ошибки
-const closeModalError = (evt) => {
-  const errorButton = submitError.querySelector('.error__button');
-  if (evt.target === submitError || evt.target === errorButton) {
-    errorButton.removeEventListener('click', closeModalError);
-    document.removeEventListener('click', closeModalError);
-    submitError.remove();
-  }
-};
+// const closeModalError = (evt) => {
+//   const errorButton = submitError.querySelector('.error__button');
+//   if (evt.target === submitError || evt.target === errorButton) {
+//     errorButton.removeEventListener('click', closeModalError);
+//     document.removeEventListener('click', closeModalError);
+//     submitError.remove();
+//   }
+// };
 
-// функция закрытия модального окна успешной загрузки
-const closeModalSuccess = (evt) => {
-  const successButton = submitSuccess.querySelector('.success__button');
-  if (evt.target === submitSuccess || evt.target === successButton) {
-    successButton.removeEventListener('click', closeModalSuccess);
-    document.removeEventListener('click', closeModalSuccess);
-    submitSuccess.remove();
-    uploadClose();
-  }
-};
+// // функция закрытия модального окна успешной загрузки
+// const closeModalSuccess = (evt) => {
+//   const successButton = submitSuccess.querySelector('.success__button');
+//   if (evt.target === submitSuccess || evt.target === successButton) {
+//     successButton.removeEventListener('click', closeModalSuccess);
+//     document.removeEventListener('click', closeModalSuccess);
+//     submitSuccess.remove();
+//     uploadClose();
+//   }
+// };
 
 // функция вывода ошибки
-const submitErrorOuput = () => {
-  document.body.append(submitError);
-  const buttonError = submitError.querySelector('.error__button');
+// const submitErrorOuput = () => {
+//   document.body.append(submitError);
+//   const buttonError = submitError.querySelector('.error__button');
 
-  buttonError.addEventListener('click', closeModalError);
-  buttonError.focus();
-  document.addEventListener('click', closeModalError);
-};
+//   buttonError.addEventListener('click', closeModalError);
+//   buttonError.focus();
+//   document.addEventListener('click', closeModalError);
+// };
 
 // функция отрисовки успешной загрузки картинки
-const submitSuccessOuput = () => {
-  uploadClose();
-  document.body.append(submitSuccess);
-  const buttonSuccess = submitSuccess.querySelector('.success__button');
+// const submitSuccessOuput = () => {
+//   uploadClose();
+//   document.body.append(submitSuccess);
+//   const buttonSuccess = submitSuccess.querySelector('.success__button');
 
-  buttonSuccess.addEventListener('click', closeModalSuccess);
-  buttonSuccess.focus();
-  document.addEventListener('click', closeModalSuccess);
-};
+//   buttonSuccess.addEventListener('click', closeModalSuccess);
+//   buttonSuccess.focus();
+//   document.addEventListener('click', closeModalSuccess);
+// };
 
 // функция отправки формы
 const submitForm = (evt) => {
@@ -106,7 +107,8 @@ const submitForm = (evt) => {
   const isValid = pristine.validate();
   const formDate = new FormData(uploadSelectImage);
   if (isValid) {
-    sendData(submitSuccessOuput, submitErrorOuput, formDate);
+    // sendData(submitSuccessOuput, submitErrorOuput, formDate);
+    sendData(modalSucces, modalError, formDate);
   }
 };
 
@@ -120,21 +122,15 @@ const uploadSubmit = () => {
 
 // функция отслеживания нажатия Esc
 const tracksEscKeystrokes = (evt) => {
-  const modalError = document.querySelector('.error');
-  const modalSucces = document.querySelector('.success');
-  if (modalError !== null && evt.key === 'Escape') {
-    submitError.remove();
-    document.removeEventListener('click', closeModalError);
-
-  } else if (modalSucces !== null && evt.key === 'Escape') {
-    submitSuccess.remove();
-    document.removeEventListener('click', closeModalSuccess);
-
-  } else if (evt.key === 'Escape' && document.activeElement !== textHashtags && document.activeElement !== textDescription) {
-    uploadClose();
-    document.removeEventListener('keydown', tracksEscKeystrokes);
-    uploadSelectImage.removeEventListener('submit', submitForm);
+  // const modalSucces = document.querySelector('.success');
+  if (evt.key === 'Escape') {
+    if (document.activeElement !== textHashtags && document.activeElement !== textDescription) {
+      uploadClose();
+      document.removeEventListener('keydown', tracksEscKeystrokes);
+      uploadSelectImage.removeEventListener('submit', submitForm);
+    }
   }
+
 };
 
 // функция открытия формы загрузки картинки
@@ -162,5 +158,7 @@ const uploadOpen = () => {
   uploadClose();
 };
 
-export { uploadOpen };
+uploadOpen();
+
+export { uploadClose };
 

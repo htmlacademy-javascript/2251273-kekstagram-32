@@ -1,8 +1,20 @@
 import { bigPictureOpen } from './picture.js';
+import { getData } from './api.js';
 
 const templatePicture = document.querySelector('#picture').content.querySelector('.picture');
 const picturesContrainer = document.querySelector('.pictures');
 const fragment = document.createDocumentFragment();
+
+const dataError = document.querySelector('#data-error').content.querySelector('.data-error');
+const showTimeError = 5000;
+
+// функция отрисовки ошибки
+const downloadErrorOuput = () => {
+  document.body.append(dataError);
+  setTimeout(() => {
+    dataError.remove();
+  }, showTimeError);
+};
 
 // функция отрисовки карточки
 const drawPhoto = (photo) => {
@@ -26,6 +38,9 @@ const drawsPhotos = (listPhotos) => {
   });
   picturesContrainer.append(fragment);
 };
+
+
+getData((data) => drawsPhotos(data), () => downloadErrorOuput());
 
 
 export { drawsPhotos };
