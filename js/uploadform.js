@@ -122,7 +122,6 @@ const uploadSubmit = () => {
 
 // функция отслеживания нажатия Esc
 const tracksEscKeystrokes = (evt) => {
-  // const modalSucces = document.querySelector('.success');
   if (evt.key === 'Escape') {
     if (document.activeElement !== textHashtags && document.activeElement !== textDescription) {
       uploadClose();
@@ -160,5 +159,5 @@ const uploadOpen = () => {
 
 uploadOpen();
 
-export { uploadClose };
+export { uploadClose, tracksEscKeystrokes };
 
