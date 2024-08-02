@@ -34,14 +34,23 @@ function errorTextDescription() {
   return `Максимальная длина комментария ${descriptionLength} символов!`;
 }
 
+//
+const blockSubmit = () => {
+  imgUploadSubmit.disabled = true;
+};
+
+const unblockSubmit = () => {
+  imgUploadSubmit.disabled = false;
+};
+
 
 // функция проверки формы перед отправкой
 const checkingForm = () => {
   const isValid = pristine.validate();
   if (isValid) {
-    imgUploadSubmit.disabled = false;
+    unblockSubmit();
   } else {
-    imgUploadSubmit.disabled = true;
+    blockSubmit();
   }
 };
 
@@ -59,8 +68,17 @@ const submitForm = (evt) => {
   evt.preventDefault();
   const isValid = pristine.validate();
   const formDate = new FormData(uploadSelectImage);
+
+  blockSubmit();
+
   if (isValid) {
-    sendData(modalSucces, modalError, formDate);
+    sendData(
+      () => {
+        modalSucces();
+        unblockSubmit();
+      },
+      modalError,
+      formDate);
     uploadSelectImage.removeEventListener('submit', submitForm);
   }
 };
