@@ -2,13 +2,11 @@ import { drawsComments } from './comments.js';
 
 const picture = document.querySelector('.big-picture');
 
-
 // функция закрытия большой картинки
 const bigPictureClose = () => {
   picture.classList.add('hidden');
   document.body.classList.remove('modal-open');
 };
-
 
 // функция отслеживания нажатия Esc
 const tracksEscKeystrokes = (evt) => {
@@ -17,7 +15,6 @@ const tracksEscKeystrokes = (evt) => {
     document.removeEventListener('keydown', tracksEscKeystrokes);
   }
 };
-
 
 // функция открытия большой картинки
 const bigPictureOpen = (photo) => {

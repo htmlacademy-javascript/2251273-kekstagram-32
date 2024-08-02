@@ -1,4 +1,3 @@
-//
 const hashtagLength = {
   MIN: 2,
   MAX: 20
