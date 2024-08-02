@@ -1,3 +1,4 @@
+import { showFilters } from './thumbnails_filter.js';
 import { bigPictureOpen } from './picture.js';
 import { getData } from './api.js';
 
@@ -39,5 +40,22 @@ const drawsThumbnails = (listPhotos) => {
 };
 
 // функция отрисовки карточек
-getData((data) => drawsThumbnails(data), () => downloadErrorOuput());
+// getData((data) => {
+//   data.sort((a, b) => b.comments.length - a.comments.length);
+//   drawsThumbnails(data);
+//   showFilters();
+// }, () => downloadErrorOuput());
+
+const renderThumbnails = (cb) => {
+  getData((data) => {
+    cb(data);
+    // data.sort((a, b) => b.comments.length - a.comments.length);
+    drawsThumbnails(data);
+  }, () => downloadErrorOuput());
+};
+
+// renderThumbnails((i) => i.sort((a, b) => b.comments.length - a.comments.length));
+renderThumbnails((i) => i.sort((a, b) => b.likes - a.likes));
+
+export { renderThumbnails };
 
