@@ -4,7 +4,6 @@ import { getData } from './api.js';
 const templatePicture = document.querySelector('#picture').content.querySelector('.picture');
 const picturesContrainer = document.querySelector('.pictures');
 const fragment = document.createDocumentFragment();
-
 const dataError = document.querySelector('#data-error').content.querySelector('.data-error');
 const showTimeError = 5000;
 
@@ -17,7 +16,7 @@ const downloadErrorOuput = () => {
 };
 
 // функция отрисовки карточки
-const drawPhoto = (photo) => {
+const drawThumbnail = (photo) => {
   const element = templatePicture.cloneNode(true);
   const elementImage = element.querySelector('.picture__img');
   elementImage.src = photo.url;
@@ -32,15 +31,13 @@ const drawPhoto = (photo) => {
 };
 
 // функция отриcовки карточек
-const drawsPhotos = (listPhotos) => {
+const drawsThumbnails = (listPhotos) => {
   listPhotos.forEach((elementPhoto) => {
-    fragment.append(drawPhoto(elementPhoto));
+    fragment.append(drawThumbnail(elementPhoto));
   });
   picturesContrainer.append(fragment);
 };
 
+// функция отрисовки карточек
+getData((data) => drawsThumbnails(data), () => downloadErrorOuput());
 
-getData((data) => drawsPhotos(data), () => downloadErrorOuput());
-
-
-export { drawsPhotos };
