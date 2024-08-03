@@ -24,7 +24,7 @@ const pristine = new Pristine(uploadSelectImage, {
   successClass: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
   errorTextTag: 'div',
-  errorTextClass: 'form__error'
+  errorTextClass: 'pristine-error'
 });
 
 
@@ -70,12 +70,9 @@ const uploadClose = () => {
 // функция отправки формы
 const submitForm = (evt) => {
   evt.preventDefault();
-
   const isValid = pristine.validate();
   const formDate = new FormData(uploadSelectImage);
-
   blockSubmit();
-
   if (isValid) {
     evt.preventDefault();
     sendData(
@@ -121,33 +118,23 @@ const loadImage = () => {
 
 // функция открытия формы загрузки картинки
 const uploadOpen = () => {
-  uploadSelectImage.addEventListener('change', () => {
-    loadImage();
-
-    imgUploadOverlay.classList.remove('hidden');
-    document.body.classList.add('modal-open');
-    uploadSubmit();
-
-    transformImage();
-    createSlider();
-
-    document.addEventListener('keydown', tracksEscKeystrokes);
-  });
-
+  loadImage();
+  imgUploadOverlay.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  uploadSubmit();
+  transformImage();
+  createSlider();
+  document.addEventListener('keydown', tracksEscKeystrokes);
   imgUploadcancel.addEventListener('click', () => {
     uploadClose();
     document.removeEventListener('keydown', tracksEscKeystrokes);
     uploadSelectImage.removeEventListener('submit', submitForm);
   });
-
-  pristine.addValidator(textHashtags, checkingHashtag.checkTextHashtag, checkingHashtag.error);
-  pristine.addValidator(textDescription, checkTextDescription, errorTextDescription);
-
-  uploadClose();
 };
 
-// функция открытия формы загрузки картинки
-uploadOpen();
+pristine.addValidator(textDescription, checkTextDescription, errorTextDescription);
+pristine.addValidator(textHashtags, checkingHashtag.checkTextHashtag, checkingHashtag.error);
+uploadSelectImage.addEventListener('change', uploadOpen);
 
 export { uploadClose, tracksEscKeystrokes, unblockSubmit };
 
