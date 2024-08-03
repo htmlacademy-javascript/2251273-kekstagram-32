@@ -13,6 +13,10 @@ const textDescription = uploadSelectImage.querySelector('.text__description');
 const imgUploadInput = uploadSelectImage.querySelector('.img-upload__input');
 const descriptionLength = 140;
 
+const fileChooser = document.querySelector('#upload-file');
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+const preview = document.querySelector('.img-upload__preview').querySelector('img');
+
 // функция проверки формы
 const pristine = new Pristine(uploadSelectImage, {
   classTo: 'img-upload__field-wrapper',
@@ -66,20 +70,22 @@ const uploadClose = () => {
 // функция отправки формы
 const submitForm = (evt) => {
   evt.preventDefault();
+
   const isValid = pristine.validate();
   const formDate = new FormData(uploadSelectImage);
 
   blockSubmit();
 
   if (isValid) {
+    evt.preventDefault();
     sendData(
       () => {
         modalSucces();
         unblockSubmit();
+        uploadSelectImage.removeEventListener('submit', submitForm);
       },
       modalError,
       formDate);
-    uploadSelectImage.removeEventListener('submit', submitForm);
   }
 };
 
@@ -101,9 +107,23 @@ const tracksEscKeystrokes = (evt) => {
   }
 };
 
+const loadImage = () => {
+  const file = fileChooser.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    preview.src = URL.createObjectURL(file);
+  }
+};
+
+
 // функция открытия формы загрузки картинки
 const uploadOpen = () => {
   uploadSelectImage.addEventListener('change', () => {
+    loadImage();
+
     imgUploadOverlay.classList.remove('hidden');
     document.body.classList.add('modal-open');
     uploadSubmit();
@@ -129,5 +149,5 @@ const uploadOpen = () => {
 // функция открытия формы загрузки картинки
 uploadOpen();
 
-export { uploadClose, tracksEscKeystrokes };
+export { uploadClose, tracksEscKeystrokes, unblockSubmit };
 

@@ -1,12 +1,20 @@
-import { showFilters } from './thumbnails_filter.js';
+import { setDefault, setRandom, setDiscussed, sortDefault, sortRandom, sortDiscussed } from './thumbnails_filter.js';
 import { bigPictureOpen } from './picture.js';
 import { getData } from './api.js';
+
+const imgFilters = document.querySelector('.img-filters');
 
 const templatePicture = document.querySelector('#picture').content.querySelector('.picture');
 const picturesContrainer = document.querySelector('.pictures');
 const fragment = document.createDocumentFragment();
 const dataError = document.querySelector('#data-error').content.querySelector('.data-error');
 const showTimeError = 5000;
+
+// функция отображения фильтров
+const showFilters = () => {
+  imgFilters.classList.remove('img-filters--inactive');
+};
+
 
 // функция отрисовки ошибки
 const downloadErrorOuput = () => {
@@ -33,29 +41,43 @@ const drawThumbnail = (photo) => {
 
 // функция отриcовки карточек
 const drawsThumbnails = (listPhotos) => {
+
   listPhotos.forEach((elementPhoto) => {
     fragment.append(drawThumbnail(elementPhoto));
   });
+
   picturesContrainer.append(fragment);
 };
 
-// функция отрисовки карточек
-// getData((data) => {
-//   data.sort((a, b) => b.comments.length - a.comments.length);
-//   drawsThumbnails(data);
-//   showFilters();
-// }, () => downloadErrorOuput());
 
-const renderThumbnails = (cb) => {
-  getData((data) => {
-    cb(data);
-    // data.sort((a, b) => b.comments.length - a.comments.length);
-    drawsThumbnails(data);
-  }, () => downloadErrorOuput());
+const clearThumbnails = () => {
+  const thumbnails = document.querySelectorAll('.picture');
+  thumbnails.forEach((element) => {
+    element.remove();
+  });
 };
 
-// renderThumbnails((i) => i.sort((a, b) => b.comments.length - a.comments.length));
-renderThumbnails((i) => i.sort((a, b) => b.likes - a.likes));
+// функция отрисовки карточек
+const getThumbnails = () => {
+  getData(
+    (data) => {
+      showFilters();
+      drawsThumbnails(data);
+      setDefault(() => {
+        clearThumbnails();
+        drawsThumbnails(sortDefault(data));
+      });
+      setRandom(() => {
+        clearThumbnails();
+        drawsThumbnails(sortRandom(data));
+      });
+      setDiscussed(() => {
+        clearThumbnails();
+        drawsThumbnails(sortDiscussed(data));
+      });
+    },
+    () => downloadErrorOuput());
+};
 
-export { renderThumbnails };
+getThumbnails();
 
