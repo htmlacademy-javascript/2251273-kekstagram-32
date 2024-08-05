@@ -1,9 +1,10 @@
 import { setDefault, setRandom, setDiscussed, sortDefault, sortRandom, sortDiscussed } from './thumbnails_filter.js';
 import { bigPictureOpen } from './picture.js';
 import { getData } from './api.js';
+import { debounce } from './utils.js';
 
+const timeDelayDrawsThumbnails = 500;
 const imgFilters = document.querySelector('.img-filters');
-
 const templatePicture = document.querySelector('#picture').content.querySelector('.picture');
 const picturesContrainer = document.querySelector('.pictures');
 const fragment = document.createDocumentFragment();
@@ -39,9 +40,18 @@ const drawThumbnail = (photo) => {
   return element;
 };
 
+// функция очистки карточек
+const clearThumbnails = () => {
+  const thumbnails = document.querySelectorAll('.picture');
+  thumbnails.forEach((element) => {
+    element.remove();
+  });
+};
+
+
 // функция отриcовки карточек
 const drawsThumbnails = (listPhotos) => {
-
+  clearThumbnails();
   listPhotos.forEach((elementPhoto) => {
     fragment.append(drawThumbnail(elementPhoto));
   });
@@ -49,13 +59,9 @@ const drawsThumbnails = (listPhotos) => {
   picturesContrainer.append(fragment);
 };
 
+// функция отрисовки карточек с задержкой
+const drawsThumbnailsDebounced = debounce(drawsThumbnails, timeDelayDrawsThumbnails);
 
-const clearThumbnails = () => {
-  const thumbnails = document.querySelectorAll('.picture');
-  thumbnails.forEach((element) => {
-    element.remove();
-  });
-};
 
 // функция отрисовки карточек
 const getThumbnails = () => {
@@ -64,16 +70,13 @@ const getThumbnails = () => {
       showFilters();
       drawsThumbnails(data);
       setDefault(() => {
-        clearThumbnails();
-        drawsThumbnails(sortDefault(data));
+        drawsThumbnailsDebounced(sortDefault(data));
       });
       setRandom(() => {
-        clearThumbnails();
-        drawsThumbnails(sortRandom(data));
+        drawsThumbnailsDebounced(sortRandom(data));
       });
       setDiscussed(() => {
-        clearThumbnails();
-        drawsThumbnails(sortDiscussed(data));
+        drawsThumbnailsDebounced(sortDiscussed(data));
       });
     },
     () => downloadErrorOuput());

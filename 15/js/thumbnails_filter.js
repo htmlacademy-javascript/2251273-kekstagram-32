@@ -1,9 +1,7 @@
 const imgFilters = document.querySelector('.img-filters');
-
 const filterDefault = document.querySelector('#filter-default');
 const filterRandom = document.querySelector('#filter-random');
 const filterDiscussed = document.querySelector('#filter-discussed');
-
 const maxRandomThumbnails = 10;
 
 

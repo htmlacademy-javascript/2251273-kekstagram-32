@@ -1,6 +1,6 @@
 const apiUrl = {
   GET: 'https://32.javascript.htmlacademy.pro/kekstagram/data',
-  POST: 'https://32.javascript.htmlacademy. pro/kekstagram',
+  POST: 'https://32.javascript.htmlacademy.pro/kekstagram',
 };
 
 // функция запроса
