@@ -1,8 +1,9 @@
-import { transformImage } from './image_scale.js';
+
 import { createSlider } from './image_filter.js';
 import { sendData } from './api.js';
 import { checkingHashtag } from './cheking_hashtag.js';
 import { modalError, modalSucces } from './modal.js';
+import { loadImage } from './image_load.js';
 
 const uploadSelectImage = document.querySelector('.img-upload__form');
 const imgUploadOverlay = uploadSelectImage.querySelector('.img-upload__overlay');
@@ -13,9 +14,6 @@ const textDescription = uploadSelectImage.querySelector('.text__description');
 const imgUploadInput = uploadSelectImage.querySelector('.img-upload__input');
 const descriptionLength = 140;
 
-const fileChooser = document.querySelector('#upload-file');
-const FILE_TYPES = ['jpg', 'jpeg', 'png'];
-const preview = document.querySelector('.img-upload__preview').querySelector('img');
 
 // функция проверки формы
 const pristine = new Pristine(uploadSelectImage, {
@@ -50,20 +48,13 @@ const unblockSubmit = () => {
 
 // функция проверки формы перед отправкой
 const checkingForm = () => {
+  console.log('checkingForm');
   const isValid = pristine.validate();
   if (isValid) {
     unblockSubmit();
   } else {
     blockSubmit();
   }
-};
-
-// функция закрытия формы загрузки картинки
-const uploadClose = () => {
-  imgUploadInput.value = '';
-  imgUploadOverlay.classList.add('hidden');
-  document.body.classList.remove('modal-open');
-  uploadSelectImage.removeEventListener('input', checkingForm);
 };
 
 
@@ -79,18 +70,24 @@ const submitForm = (evt) => {
       () => {
         modalSucces();
         unblockSubmit();
-        uploadSelectImage.removeEventListener('submit', submitForm);
       },
+
       modalError,
       formDate);
   }
 };
 
-// функция отправки формы
-const uploadSubmit = () => {
-  uploadSelectImage.addEventListener('input', checkingForm);
-  uploadSelectImage.addEventListener('submit', submitForm);
+
+// функция закрытия формы загрузки картинки
+const uploadClose = () => {
+  imgUploadInput.value = null;
+  uploadSelectImage.reset();
+  imgUploadOverlay.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  uploadSelectImage.removeEventListener('input', checkingForm);
+  uploadSelectImage.removeEventListener('submit', submitForm);
 };
+
 
 // функция отслеживания нажатия Esc
 const tracksEscKeystrokes = (evt) => {
@@ -104,37 +101,33 @@ const tracksEscKeystrokes = (evt) => {
   }
 };
 
-const loadImage = () => {
-  const file = fileChooser.files[0];
-  const fileName = file.name.toLowerCase();
-
-  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
-
-  if (matches) {
-    preview.src = URL.createObjectURL(file);
-  }
-};
-
 
 // функция открытия формы загрузки картинки
 const uploadOpen = () => {
-  loadImage();
+  createSlider();
   imgUploadOverlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  uploadSubmit();
-  transformImage();
-  createSlider();
   document.addEventListener('keydown', tracksEscKeystrokes);
+
   imgUploadcancel.addEventListener('click', () => {
     uploadClose();
     document.removeEventListener('keydown', tracksEscKeystrokes);
     uploadSelectImage.removeEventListener('submit', submitForm);
   });
+
+  uploadSelectImage.addEventListener('input', checkingForm);
+  uploadSelectImage.addEventListener('submit', submitForm);
 };
 
 pristine.addValidator(textDescription, checkTextDescription, errorTextDescription);
 pristine.addValidator(textHashtags, checkingHashtag.checkTextHashtag, checkingHashtag.error);
-uploadSelectImage.addEventListener('change', uploadOpen);
+
+uploadSelectImage.addEventListener('change', () => {
+  // createSlider();
+  uploadOpen();
+});
+imgUploadInput.addEventListener('input', loadImage);
+
 
 export { uploadClose, tracksEscKeystrokes, unblockSubmit };
 
