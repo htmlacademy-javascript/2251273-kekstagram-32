@@ -1,3 +1,4 @@
+import { transformImage } from './image_scale.js';
 import { debounce, corectValue } from './utils';
 
 const timeDelayFilter = 500;
@@ -7,6 +8,7 @@ const sliderContainer = previewContainer.querySelector('.img-upload__effect-leve
 const slider = sliderContainer.querySelector('.effect-level__slider');
 const effects = document.querySelector('.img-upload__effects');
 const effectLevelValue = document.querySelector('.effect-level__value');
+
 
 // создание слайдера
 noUiSlider.create(slider, {
@@ -108,7 +110,6 @@ const updateEffectDebounced = debounce(updateEffect, timeDelayFilter);
 const updateSlider = () => {
   const number = Number(slider.noUiSlider.get());
   effectLevelValue.value = corectValue(number);
-  // console.log(Number(slider.noUiSlider.get()).toFixed(1));
   displaySlider(getEffect());
   updateEffectDebounced(getEffect(), effectLevelValue.value);
 };
@@ -123,6 +124,7 @@ const setFilter = () => {
 const createSlider = () => {
   slider.noUiSlider.on('update', updateSlider);
   effects.addEventListener('change', setFilter);
+  transformImage();
 };
 
 
