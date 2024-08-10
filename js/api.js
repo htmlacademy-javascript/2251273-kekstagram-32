@@ -3,6 +3,7 @@ const ApiUrl = {
   POST: 'https://32.javascript.htmlacademy.pro/kekstagram/',
 };
 
+
 // функция запроса
 const request = (onSuccess, onError, body, url, method) => {
   fetch(url, {
@@ -28,4 +29,6 @@ const request = (onSuccess, onError, body, url, method) => {
 const getData = (onSuccess, onError, body = null, url = ApiUrl.GET, method = 'GET') => request(onSuccess, onError, body ,url, method);
 const sendData = (onSuccess, onError, body = null, url = ApiUrl.POST, method = 'POST') => request(onSuccess, onError, body, url, method);
 
+
 export { getData, sendData };
+

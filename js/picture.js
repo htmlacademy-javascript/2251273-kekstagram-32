@@ -1,6 +1,8 @@
 import { drawsComments } from './comments.js';
 
+
 const picture = document.querySelector('.big-picture');
+
 
 // функция закрытия большой картинки
 const bigPictureClose = () => {
@@ -45,4 +47,6 @@ const bigPictureOpen = (photo) => {
   document.addEventListener('keydown', tracksEscKeystrokes);
 };
 
+
 export { bigPictureOpen };
+

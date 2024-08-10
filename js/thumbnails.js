@@ -3,6 +3,7 @@ import { bigPictureOpen } from './picture.js';
 import { getData } from './api.js';
 import { debounce } from './utils.js';
 
+
 const timeDelayDrawsThumbnails = 500;
 const imgFilters = document.querySelector('.img-filters');
 const templatePicture = document.querySelector('#picture').content.querySelector('.picture');

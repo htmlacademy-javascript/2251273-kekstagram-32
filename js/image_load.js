@@ -18,4 +18,6 @@ const loadImage = () => {
   }
 };
 
+
 export { loadImage };
+

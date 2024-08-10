@@ -12,6 +12,7 @@ const setFilter = (evt) => {
   evt.target.classList.add('img-filters__button--active');
 };
 
+
 // функция отображения по умолчанию
 const setDefault = (cb) => {
   filterDefault.addEventListener('click', (evt) => {
@@ -22,6 +23,7 @@ const setDefault = (cb) => {
 
 // функция сортировки по умолчанию (id)
 const sortDefault = (array) => array.sort((first, last) => first.id - last.id);
+
 
 // функция выбора случайного отображения
 const setRandom = (cb) => {
@@ -34,6 +36,7 @@ const setRandom = (cb) => {
 // функция сортировки по случайному отображению
 const sortRandom = (array) => array.sort(() => Math.random() - 0.5).slice(0, maxRandomThumbnails);
 
+
 // функция выбора отображения самых обсуждаемых миниатюр
 const setDiscussed = (cb) => {
   filterDiscussed.addEventListener('click', (evt) => {
@@ -45,4 +48,6 @@ const setDiscussed = (cb) => {
 // функция сортировки по количеству комментариев
 const sortDiscussed = (array) => array.sort((first, last) => last.comments.length - first.comments.length);
 
+
 export { setDefault, setRandom, setDiscussed, sortDefault, sortRandom, sortDiscussed };
+

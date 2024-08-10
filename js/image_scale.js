@@ -4,16 +4,19 @@ const scaleControlValue = imgUploadPreviewContainer.querySelector('.scale__contr
 const decreaseImageButton = imgUploadPreviewContainer.querySelector('.scale__control--smaller');
 const increaseImageButton = imgUploadPreviewContainer.querySelector('.scale__control--bigger');
 
+
 const ScaleControl = {
   MIN: 25,
   MAX: 100,
   STEP: 25
 };
 
+
 // функция изменения масштаба
 const scaleImage = () => {
   imgUploadPreview.style.transform = `scale(${Number(scaleControlValue.value.replace('%', '')) / ScaleControl.MAX})`;
 };
+
 
 // функции уменьшения масштаба
 const decreaseImage = () => {
@@ -31,6 +34,7 @@ const increaseImage = () => {
   scaleImage();
 };
 
+
 // функции контроля изменения масштаба
 const transformImage = () => {
   scaleImage();
@@ -39,4 +43,6 @@ const transformImage = () => {
   increaseImageButton.addEventListener('click', increaseImage);
 };
 
+
 export { transformImage };
+

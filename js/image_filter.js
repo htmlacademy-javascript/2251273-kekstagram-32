@@ -1,6 +1,7 @@
 import { transformImage } from './image_scale.js';
 import { debounce, corectValue } from './utils';
 
+
 const timeDelayFilter = 500;
 const previewContainer = document.querySelector('.img-upload__preview-container');
 const imgUploadPreview = previewContainer.querySelector('.img-upload__preview img');
@@ -20,7 +21,6 @@ noUiSlider.create(slider, {
   step: 10,
   connect: 'lower'
 });
-
 
 // настройки слайдера
 const filterSettings = {
@@ -129,3 +129,4 @@ const createSlider = () => {
 
 
 export { createSlider };
+
