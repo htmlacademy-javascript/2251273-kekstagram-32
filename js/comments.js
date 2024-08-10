@@ -1,19 +1,17 @@
 const commentShownCount = 5;
 
-// функция отрисовки количества коментариев
+// функция отрисовки коментариев
 const showNumberComments = (pictureCloned, comments) => {
   const socialComments = pictureCloned.querySelector('.social__comments');
   const socialCommentShownCount = pictureCloned.querySelector('.social__comment-shown-count');
   const socialCommentTotalCount = pictureCloned.querySelector('.social__comment-total-count');
   const socialCommentsLoader = pictureCloned.querySelector('.social__comments-loader');
-
   // проверка количества коментариев
   if (comments.length <= socialComments.childElementCount) {
     socialCommentsLoader.classList.add('hidden');
   } else {
     socialCommentsLoader.classList.remove('hidden');
   }
-
   // отображение количества коментариев
   socialCommentShownCount.textContent = socialComments.childElementCount;
   socialCommentTotalCount.textContent = comments.length;
@@ -54,7 +52,6 @@ const showNextComents = (pictureCloned, comments, displayedComments) => {
 const drawsComments = (pictureCloned, comments) => {
   const socialComments = pictureCloned.querySelector('.social__comments');
   let displayedComments = commentShownCount;
-
   socialComments.innerHTML = '';
 
   const socialCommentsLoader = pictureCloned.querySelector('.social__comments-loader');
@@ -64,6 +61,5 @@ const drawsComments = (pictureCloned, comments) => {
     showNextComents(pictureCloned, comments, displayedComments += commentShownCount);
   });
 };
-
 
 export { drawsComments };

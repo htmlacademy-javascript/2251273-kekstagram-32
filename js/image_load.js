@@ -3,13 +3,13 @@ const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 const preview = document.querySelector('.img-upload__preview').querySelector('img');
 const effectsPreview = document.querySelectorAll('.effects__preview');
 
+// функция загрузки изображения
 const loadImage = () => {
   const file = fileChooser.files[0];
   const fileName = file.name.toLowerCase();
-  // const effectsPreview = document.querySelectorAll('.effects__preview');
-
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
 
+  // проверка типа файла
   if (matches) {
     preview.src = URL.createObjectURL(file);
     effectsPreview.forEach((icon) => {
@@ -18,6 +18,4 @@ const loadImage = () => {
   }
 };
 
-
 export { loadImage };
-
