@@ -17,4 +17,3 @@ function corectValue (value) {
 
 
 export { debounce, corectValue };
-

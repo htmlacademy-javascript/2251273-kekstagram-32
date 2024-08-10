@@ -1,5 +1,5 @@
 import { transformImage } from './image_scale.js';
-import { debounce, corectValue } from './utils';
+import { debounce, corectValue } from './function.js';
 
 
 const timeDelayFilter = 500;

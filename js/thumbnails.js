@@ -1,7 +1,7 @@
 import { setDefault, setRandom, setDiscussed, sortDefault, sortRandom, sortDiscussed } from './thumbnails_filter.js';
 import { bigPictureOpen } from './picture.js';
 import { getData } from './api.js';
-import { debounce } from './utils.js';
+import { debounce } from './function.js';
 
 
 const timeDelayDrawsThumbnails = 500;
