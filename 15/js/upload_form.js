@@ -13,16 +13,15 @@ const textHashtags = uploadSelectImage.querySelector('.text__hashtags');
 const textDescription = uploadSelectImage.querySelector('.text__description');
 const imgUploadInput = uploadSelectImage.querySelector('.img-upload__input');
 const descriptionLength = 140;
+const scaleControlValue = document.querySelector('.scale__control--value');
+const effectNone = uploadSelectImage.querySelector('#effect-none');
 
 
 // функция проверки формы
 const pristine = new Pristine(uploadSelectImage, {
   classTo: 'img-upload__field-wrapper',
-  errorClass: 'img-upload__field-wrapper--error',
-  successClass: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
-  errorTextTag: 'div',
-  errorTextClass: 'pristine-error'
+  errorTextClass: 'img-upload__field-wrapper--error'
 });
 
 
@@ -31,16 +30,20 @@ function checkTextDescription(text) {
   return text.length <= descriptionLength;
 }
 
+
 // функция вывода ошибки комментария
 function errorTextDescription() {
   return `Максимальная длина комментария ${descriptionLength} символов!`;
 }
 
-//
+
+// функция блокировки кнопки
 const blockSubmit = () => {
   imgUploadSubmit.disabled = true;
 };
 
+
+// функция разблокировки кнопки
 const unblockSubmit = () => {
   imgUploadSubmit.disabled = false;
 };
@@ -48,7 +51,6 @@ const unblockSubmit = () => {
 
 // функция проверки формы перед отправкой
 const checkingForm = () => {
-  console.log('checkingForm');
   const isValid = pristine.validate();
   if (isValid) {
     unblockSubmit();
@@ -65,13 +67,12 @@ const submitForm = (evt) => {
   const formDate = new FormData(uploadSelectImage);
   blockSubmit();
   if (isValid) {
-    evt.preventDefault();
     sendData(
       () => {
         modalSucces();
         unblockSubmit();
+        uploadSelectImage.reset();
       },
-
       modalError,
       formDate);
   }
@@ -80,8 +81,13 @@ const submitForm = (evt) => {
 
 // функция закрытия формы загрузки картинки
 const uploadClose = () => {
+  unblockSubmit();
   imgUploadInput.value = null;
-  uploadSelectImage.reset();
+  textDescription.value = '';
+  textHashtags.value = '';
+  scaleControlValue.value = '100%';
+  effectNone.checked = true;
+  pristine.reset();
   imgUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   uploadSelectImage.removeEventListener('input', checkingForm);
@@ -123,7 +129,6 @@ pristine.addValidator(textDescription, checkTextDescription, errorTextDescriptio
 pristine.addValidator(textHashtags, checkingHashtag.checkTextHashtag, checkingHashtag.error);
 
 uploadSelectImage.addEventListener('change', () => {
-  // createSlider();
   uploadOpen();
 });
 imgUploadInput.addEventListener('input', loadImage);

@@ -8,16 +8,11 @@ const closeModal = (evt) => {
   const modal = document.querySelector('.modal');
   const button = modal.querySelector('button');
 
-  if (evt.key === 'Escape') {
+  if (evt.key === 'Escape' || evt.target === modal || evt.target === button) {
     unblockSubmit();
     modal.remove();
     document.removeEventListener('keydown', closeModal);
     document.removeEventListener('click', closeModal);
-  } else if (evt.target === modal || evt.target === button) {
-    unblockSubmit();
-    modal.remove();
-    document.removeEventListener('click', closeModal);
-    document.removeEventListener('keydown', closeModal);
   }
 };
 

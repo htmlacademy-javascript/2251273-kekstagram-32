@@ -6,12 +6,14 @@ function debounce (callback, timeoutDelay = 500) {
   };
 }
 
+
 function corectValue (value) {
   if (Number.isInteger(value)) {
     return value.toFixed(0);
   }
   return value.toFixed(1);
 }
+
 
 export { debounce, corectValue };
 

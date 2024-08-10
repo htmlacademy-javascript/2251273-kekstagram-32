@@ -1,9 +1,9 @@
-const hashtagLength = {
+const HashtagLength = {
   MIN: 2,
   MAX: 20
 };
 
-const hashtagCount = {
+const HashtagCount = {
   MAX: 5
 };
 
@@ -19,10 +19,10 @@ const checkingHashtag = new function () {
     } else if (hashtag.lastIndexOf('#') !== 0) {
       this.textError = `"${hashtag}" — Хэштег должен содержать только один символ "#"!`;
       return false;
-    } else if (hashtag.length === hashtagLength.MIN - 1) {
+    } else if (hashtag.length === HashtagLength.MIN - 1) {
       this.textError = `"${hashtag}" — Хэштег должен содержать "#" и 1 символ!`;
       return false;
-    } else if (hashtag.length > hashtagLength.MAX) {
+    } else if (hashtag.length > HashtagLength.MAX) {
       this.textError = `"${hashtag}" — Хэштег должен содержать не более 20 символов!`;
       return false;
     } else if (!mask.test(hashtag)) {
@@ -55,8 +55,8 @@ const checkingHashtag = new function () {
       return true;
     } else {
       const arrayHashtags = textHashtag.trim().split(/\s+/);
-      if (arrayHashtags.length > hashtagCount.MAX) {
-        this.textError = `Максимальное количество хэштегов - ${hashtagCount.MAX}!`;
+      if (arrayHashtags.length > HashtagCount.MAX) {
+        this.textError = `Максимальное количество хэштегов - ${HashtagCount.MAX}!`;
         return false;
       } else if (!this.checkDublicates(arrayHashtags)) {
         return false;
