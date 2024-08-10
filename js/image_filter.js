@@ -1,11 +1,12 @@
+import { transformImage } from './image_scale.js';
+import { debounce, corectValue } from './utils';
+
+const timeDelayFilter = 500;
 const previewContainer = document.querySelector('.img-upload__preview-container');
 const imgUploadPreview = previewContainer.querySelector('.img-upload__preview img');
-
 const sliderContainer = previewContainer.querySelector('.img-upload__effect-level');
 const slider = sliderContainer.querySelector('.effect-level__slider');
-
 const effects = document.querySelector('.img-upload__effects');
-
 const effectLevelValue = document.querySelector('.effect-level__value');
 
 
@@ -96,8 +97,6 @@ const displaySlider = (effect = 'none') => {
 
 // функция обновления эффекта
 const updateEffect = (effect = 'none', value) => {
-  displaySlider(effect);
-
   if (effect !== 'none') {
     imgUploadPreview.style.filter = `${filterSettings[effect].style}(${value}${filterSettings[effect].unit || ''})` || 'none';
   } else {
@@ -105,22 +104,27 @@ const updateEffect = (effect = 'none', value) => {
   }
 };
 
+const updateEffectDebounced = debounce(updateEffect, timeDelayFilter);
+
 // функция обновления слайдера
 const updateSlider = () => {
-  effectLevelValue.value = slider.noUiSlider.get();
-
-  updateEffect(getEffect(), effectLevelValue.value);
+  const number = Number(slider.noUiSlider.get());
+  effectLevelValue.value = corectValue(number);
+  displaySlider(getEffect());
+  updateEffectDebounced(getEffect(), effectLevelValue.value);
 };
 
 // функция выбора эффекта
 const setFilter = () => {
+  effectLevelValue.value = filterSettings[getEffect()].start;
   slider.noUiSlider.updateOptions(filterSettings[getEffect()]);
 };
 
-// функция
+// функция создания слайдера
 const createSlider = () => {
   slider.noUiSlider.on('update', updateSlider);
   effects.addEventListener('change', setFilter);
+  transformImage();
 };
 
 
