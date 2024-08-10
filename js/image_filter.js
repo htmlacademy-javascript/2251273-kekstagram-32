@@ -10,6 +10,9 @@ const effects = document.querySelector('.img-upload__effects');
 const effectLevelValue = document.querySelector('.effect-level__value');
 
 
+const effectLevelValue = document.querySelector('.effect-level__value');
+
+
 // создание слайдера
 noUiSlider.create(slider, {
   range: {
