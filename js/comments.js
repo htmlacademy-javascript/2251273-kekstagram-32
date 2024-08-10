@@ -1,5 +1,6 @@
 const commentShownCount = 5;
 
+
 // функция отрисовки коментариев
 const showNumberComments = (pictureCloned, comments) => {
   const socialComments = pictureCloned.querySelector('.social__comments');
@@ -16,6 +17,7 @@ const showNumberComments = (pictureCloned, comments) => {
   socialCommentShownCount.textContent = socialComments.childElementCount;
   socialCommentTotalCount.textContent = comments.length;
 };
+
 
 // функция отрисовки коментария
 const createComment = (comment) => {
@@ -62,4 +64,6 @@ const drawsComments = (pictureCloned, comments) => {
   });
 };
 
+
 export { drawsComments };
+

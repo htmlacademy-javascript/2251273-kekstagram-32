@@ -7,6 +7,7 @@ const HashtagCount = {
   MAX: 5
 };
 
+
 // функция проверки строки хэштега
 const checkingHashtag = new function () {
   this.textError = '';
@@ -67,4 +68,6 @@ const checkingHashtag = new function () {
   };
 };
 
+
 export { checkingHashtag };
+

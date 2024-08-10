@@ -1,3 +1,4 @@
+// функция дебаунса
 function debounce (callback, timeoutDelay = 500) {
   let timeoutId;
   return (...rest) => {
@@ -6,7 +7,7 @@ function debounce (callback, timeoutDelay = 500) {
   };
 }
 
-
+// функция коррекции значений
 function corectValue (value) {
   if (Number.isInteger(value)) {
     return value.toFixed(0);
@@ -16,4 +17,3 @@ function corectValue (value) {
 
 
 export { debounce, corectValue };
-

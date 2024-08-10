@@ -1,9 +1,9 @@
-
 import { createSlider } from './image_filter.js';
 import { sendData } from './api.js';
 import { checkingHashtag } from './cheking_hashtag.js';
 import { modalError, modalSucces } from './modal.js';
 import { loadImage } from './image_load.js';
+
 
 const uploadSelectImage = document.querySelector('.img-upload__form');
 const imgUploadOverlay = uploadSelectImage.querySelector('.img-upload__overlay');
@@ -30,7 +30,6 @@ function checkTextDescription(text) {
   return text.length <= descriptionLength;
 }
 
-
 // функция вывода ошибки комментария
 function errorTextDescription() {
   return `Максимальная длина комментария ${descriptionLength} символов!`;
@@ -42,14 +41,13 @@ const blockSubmit = () => {
   imgUploadSubmit.disabled = true;
 };
 
-
 // функция разблокировки кнопки
 const unblockSubmit = () => {
   imgUploadSubmit.disabled = false;
 };
 
 
-// функция проверки формы перед отправкой
+// функция проверки формы
 const checkingForm = () => {
   const isValid = pristine.validate();
   if (isValid) {
@@ -58,7 +56,6 @@ const checkingForm = () => {
     blockSubmit();
   }
 };
-
 
 // функция отправки формы
 const submitForm = (evt) => {
@@ -78,16 +75,20 @@ const submitForm = (evt) => {
   }
 };
 
-
-// функция закрытия формы загрузки картинки
-const uploadClose = () => {
-  unblockSubmit();
+const resetForm = () => {
+  uploadSelectImage.reset();
   imgUploadInput.value = null;
   textDescription.value = '';
   textHashtags.value = '';
   scaleControlValue.value = '100%';
   effectNone.checked = true;
   pristine.reset();
+};
+
+// функция закрытия формы загрузки картинки
+const uploadClose = () => {
+  unblockSubmit();
+  resetForm();
   imgUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   uploadSelectImage.removeEventListener('input', checkingForm);
