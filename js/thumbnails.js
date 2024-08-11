@@ -1,16 +1,18 @@
-import { setDefault, setRandom, setDiscussed, sortDefault, sortRandom, sortDiscussed } from './thumbnails_filter.js';
+import { setFilterDefault, setFilterRandom, setfilterDiscussed } from './thumbnails_filter.js';
 import { bigPictureOpen } from './picture.js';
 import { getData } from './api.js';
 import { debounce } from './function.js';
 
 
-const timeDelayDrawsThumbnails = 500;
+const TIME_DELAY_DRAWS_THUMBNAILS = 500;
+const SHOW_TIMER_ERROR = 5000;
+
 const imgFilters = document.querySelector('.img-filters');
 const templatePicture = document.querySelector('#picture').content.querySelector('.picture');
 const picturesContrainer = document.querySelector('.pictures');
 const fragment = document.createDocumentFragment();
 const dataError = document.querySelector('#data-error').content.querySelector('.data-error');
-const showTimeError = 5000;
+
 
 // функция отображения фильтров
 const showFilters = () => {
@@ -23,7 +25,7 @@ const downloadErrorOuput = () => {
   document.body.append(dataError);
   setTimeout(() => {
     dataError.remove();
-  }, showTimeError);
+  }, SHOW_TIMER_ERROR);
 };
 
 // функция отрисовки карточки
@@ -61,7 +63,7 @@ const drawsThumbnails = (listPhotos) => {
 };
 
 // функция отрисовки карточек с задержкой
-const drawsThumbnailsDebounced = debounce(drawsThumbnails, timeDelayDrawsThumbnails);
+const drawsThumbnailsDebounced = debounce(drawsThumbnails, TIME_DELAY_DRAWS_THUMBNAILS);
 
 
 // функция отрисовки карточек
@@ -70,15 +72,11 @@ const getThumbnails = () => {
     (data) => {
       showFilters();
       drawsThumbnails(data);
-      setDefault(() => {
-        drawsThumbnailsDebounced(sortDefault(data));
-      });
-      setRandom(() => {
-        drawsThumbnailsDebounced(sortRandom(data));
-      });
-      setDiscussed(() => {
-        drawsThumbnailsDebounced(sortDiscussed(data));
-      });
+
+      setFilterDefault(drawsThumbnailsDebounced, data);
+      setFilterRandom(drawsThumbnailsDebounced, data);
+      setfilterDiscussed(drawsThumbnailsDebounced, data);
+
     },
     () => downloadErrorOuput());
 };

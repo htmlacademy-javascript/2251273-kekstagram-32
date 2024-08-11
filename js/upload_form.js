@@ -5,6 +5,8 @@ import { modalError, modalSucces } from './modal.js';
 import { loadImage } from './image_load.js';
 
 
+const DESCRIPTION_LENGTH = 140;
+
 const uploadSelectImage = document.querySelector('.img-upload__form');
 const imgUploadOverlay = uploadSelectImage.querySelector('.img-upload__overlay');
 const imgUploadcancel = uploadSelectImage.querySelector('.img-upload__cancel');
@@ -12,7 +14,6 @@ const imgUploadSubmit = uploadSelectImage.querySelector('.img-upload__submit');
 const textHashtags = uploadSelectImage.querySelector('.text__hashtags');
 const textDescription = uploadSelectImage.querySelector('.text__description');
 const imgUploadInput = uploadSelectImage.querySelector('.img-upload__input');
-const descriptionLength = 140;
 const scaleControlValue = document.querySelector('.scale__control--value');
 const effectNone = uploadSelectImage.querySelector('#effect-none');
 
@@ -27,12 +28,12 @@ const pristine = new Pristine(uploadSelectImage, {
 
 // функция проверки комментария
 function checkTextDescription(text) {
-  return text.length <= descriptionLength;
+  return text.length <= DESCRIPTION_LENGTH;
 }
 
 // функция вывода ошибки комментария
 function errorTextDescription() {
-  return `Максимальная длина комментария ${descriptionLength} символов!`;
+  return `Максимальная длина комментария ${DESCRIPTION_LENGTH} символов!`;
 }
 
 

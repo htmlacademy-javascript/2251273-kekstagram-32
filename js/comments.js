@@ -1,4 +1,4 @@
-const commentShownCount = 5;
+const COMMENT_SHOWN_COUNT = 5;
 
 
 // функция отрисовки коментариев
@@ -44,7 +44,7 @@ const createComment = (comment) => {
 // функция отрисовки следующих коментариев
 const showNextComents = (pictureCloned, comments, displayedComments) => {
   const socialComments = pictureCloned.querySelector('.social__comments');
-  comments.slice(displayedComments - commentShownCount, displayedComments).forEach((comment) => {
+  comments.slice(displayedComments - COMMENT_SHOWN_COUNT, displayedComments).forEach((comment) => {
     socialComments.append(createComment(comment));
   });
   showNumberComments(pictureCloned, comments);
@@ -53,14 +53,14 @@ const showNextComents = (pictureCloned, comments, displayedComments) => {
 // функция отрисовки коментариев
 const drawsComments = (pictureCloned, comments) => {
   const socialComments = pictureCloned.querySelector('.social__comments');
-  let displayedComments = commentShownCount;
+  let displayedComments = COMMENT_SHOWN_COUNT;
   socialComments.innerHTML = '';
 
   const socialCommentsLoader = pictureCloned.querySelector('.social__comments-loader');
   showNextComents(pictureCloned, comments, displayedComments);
 
   socialCommentsLoader.addEventListener('click', () => {
-    showNextComents(pictureCloned, comments, displayedComments += commentShownCount);
+    showNextComents(pictureCloned, comments, displayedComments += COMMENT_SHOWN_COUNT);
   });
 };
 

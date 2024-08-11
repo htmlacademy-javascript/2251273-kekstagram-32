@@ -2,7 +2,8 @@ import { transformImage } from './image_scale.js';
 import { debounce, corectValue } from './function.js';
 
 
-const timeDelayFilter = 500;
+const TIME_DELAY_FILTER = 500;
+
 const previewContainer = document.querySelector('.img-upload__preview-container');
 const imgUploadPreview = previewContainer.querySelector('.img-upload__preview img');
 const sliderContainer = previewContainer.querySelector('.img-upload__effect-level');
@@ -104,7 +105,7 @@ const updateEffect = (effect = 'none', value) => {
   }
 };
 
-const updateEffectDebounced = debounce(updateEffect, timeDelayFilter);
+const updateEffectDebounced = debounce(updateEffect, TIME_DELAY_FILTER);
 
 // функция обновления слайдера
 const updateSlider = () => {
