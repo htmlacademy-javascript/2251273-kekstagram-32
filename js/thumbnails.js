@@ -81,5 +81,6 @@ const getThumbnails = () => {
     () => downloadErrorOuput());
 };
 
+
 getThumbnails();
 
