@@ -1,4 +1,4 @@
-import { setFilterDefault, setFilterRandom, setfilterDiscussed } from './thumbnails_filter.js';
+import { setFilterDefault, setFilterRandom, setfilterDiscussed } from './thumbnails-filter.js';
 import { bigPictureOpen } from './picture.js';
 import { getData } from './api.js';
 import { debounce } from './function.js';
