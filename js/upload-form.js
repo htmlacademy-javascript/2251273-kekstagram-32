@@ -1,6 +1,6 @@
 import { createSlider } from './image-filter.js';
 import { sendData } from './api.js';
-import { checkingHashtag } from './cheking_hashtag.js';
+import { checkingHashtag } from './cheking-hashtag.js';
 import { modalError, modalSucces } from './modal.js';
 import { loadImage } from './image-load.js';
 
