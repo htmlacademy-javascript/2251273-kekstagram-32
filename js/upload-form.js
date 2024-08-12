@@ -1,8 +1,8 @@
-import { createSlider } from './image_filter.js';
+import { createSlider } from './image-filter.js';
 import { sendData } from './api.js';
 import { checkingHashtag } from './cheking_hashtag.js';
 import { modalError, modalSucces } from './modal.js';
-import { loadImage } from './image_load.js';
+import { loadImage } from './image-load.js';
 
 
 const DESCRIPTION_LENGTH = 140;
@@ -130,11 +130,11 @@ const uploadOpen = () => {
 pristine.addValidator(textDescription, checkTextDescription, errorTextDescription);
 pristine.addValidator(textHashtags, checkingHashtag.checkTextHashtag, checkingHashtag.error);
 
-uploadSelectImage.addEventListener('change', () => {
-  uploadOpen();
-});
-imgUploadInput.addEventListener('input', loadImage);
 
+const openForm = () => {
+  uploadSelectImage.addEventListener('change', uploadOpen);
+  imgUploadInput.addEventListener('input', loadImage);
+};
 
-export { uploadClose, tracksEscKeystrokes, unblockSubmit };
+export { uploadClose, tracksEscKeystrokes, unblockSubmit, openForm };
 

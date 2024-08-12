@@ -1,3 +1,6 @@
-import './thumbnails.js';
-import './thumbnails_filter.js';
-import './upload_form.js';
+import { getThumbnails } from './thumbnails.js';
+import { openForm } from './upload-form.js';
+
+getThumbnails();
+openForm();
+

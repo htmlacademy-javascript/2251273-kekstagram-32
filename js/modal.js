@@ -1,4 +1,4 @@
-import { uploadClose, tracksEscKeystrokes, unblockSubmit } from './upload_form.js';
+import { uploadClose, tracksEscKeystrokes, unblockSubmit } from './upload-form.js';
 
 const submitError = document.querySelector('#error').content.querySelector('.error');
 const submitSuccess = document.querySelector('#success').content.querySelector('.success');
