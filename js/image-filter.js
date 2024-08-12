@@ -1,4 +1,4 @@
-import { transformImage } from './image_scale.js';
+import { transformImage } from './image-scale.js';
 import { debounce, corectValue } from './function.js';
 
 

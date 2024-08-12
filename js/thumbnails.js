@@ -82,5 +82,5 @@ const getThumbnails = () => {
 };
 
 
-getThumbnails();
+export { getThumbnails };
 
